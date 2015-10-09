@@ -1,0 +1,102 @@
+<style>
+    #container2 {
+        position: relative;
+    }
+    
+    #navi,
+    .boton_borrar_galeria {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        text-align: right;
+        padding-right: 35px;
+    }
+</style>
+
+<div class="btn-group" role="group">
+    <button type="button" onclick="mostrar_fotos_galeria(this)" class="btn btn-info">
+        <h3>
+            <i class="glyphicon glyphicon-camera"></i>
+                <span>Fotos</span>
+        </h3>
+    </button>
+
+    <button style="margin-left:10px" onclick="mostrar_videos_galeria()" type="button" class="btn btn-default">
+        <h3>
+            <i class="glyphicon glyphicon-film"></i>
+                <span>Vídeos</span>
+        </h3>
+    </button>
+</div>
+
+<div class="row" style="margin-top:10px">
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <label for="file-input">
+                <img style="padding:40px; width: 160px; height: 150px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">
+            </label>
+            <input multiple id="file-input" style="display:none" type="file" />
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button onclick="abrir_popup_accion()" type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+</div>
+
+<script>
+    var x;
+    function mostrar_fotos_galeria(boton){
+        console.log(boton);
+        x = boton;
+    }
+    function abrir_popup_accion(tipo) {
+        swal({
+            title: 'Esta seguro?',
+            text: 'La imagen será borrada del servidor!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si!',
+            closeOnConfirm: true
+        });
+    }
+</script>

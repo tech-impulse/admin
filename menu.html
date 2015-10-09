@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="lib/swal/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/swal/sweetalert.css">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+    <script type="text/javascript" src="lib/calendar/calendar.js"></script>
+    <script type="text/javascript" src="lib/calendar/language/es-ES.js"></script>
+    <link rel="stylesheet" href="lib/calendar/calendar.css">
+
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header" sty>
+                    <img src="css/img/logo_mini.png" style="height:50px">
+                </div>
+                <div>
+                    <ul class="nav navbar-nav" id="barMenu">
+                        <li class="active" onclick="cargar_pagina('pantallas')" id="btn_menu_pantallas"><a href="#">Pantallas</a>
+                        </li>
+                        <li onclick="cargar_pagina('programacion')" id="btn_menu_programacion"><a href="#">Programación</a>
+                        </li>
+                        <li onclick="cargar_pagina('galeria')" id="btn_menu_galeria"><a href="#">Galería</a>
+                        </li>
+                        <li onclick="cargar_pagina('plantillas')" id="btn_menu_plantillas"><a href="#">Plantillas</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="content" style="margin:100px;">
+           
+        </div>
+    </body>
+
+</html>
+
+<script>
+    function cargar_pagina(pantalla) {
+        $("#barMenu li").removeClass("active");
+        $("#btn_menu_" + pantalla).toggleClass("active");
+        switch (pantalla) {
+        case 'pantallas':
+            $("#content").load("pantallas.html");
+            break;
+        case 'programacion':
+            $("#content").load("programacion.php");
+            break;
+        case 'galeria':
+            $("#content").load("galeria.html");
+            break;
+        case 'plantillas':
+            $("#content").load("plantillas.html");
+            break;
+        }
+        console.log(pantalla);
+    }
+</script>
