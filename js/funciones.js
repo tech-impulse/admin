@@ -2,6 +2,7 @@
  * FUNCIÓN QUE MUESTRA POR PANTALLA LAS IMAGENES DE LA GALERIA
  * @param {Object} imagenes (Json con la información de las imagenes)
  */
+<<<<<<< HEAD
 
 var json = [{
     "id_externo": 1,
@@ -133,6 +134,14 @@ function cargar_media() {
 
 function borrar_elemento_galeria(id) {}
 
+=======
+function mostrar_galeria_imagenes(imagenes) {
+
+    console.log("Carga las imagenes");
+
+}
+
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
 function abrir_popup_informacion(dato) {
     swal({
         title: 'Aviso!',
@@ -142,6 +151,7 @@ function abrir_popup_informacion(dato) {
     });
 }
 
+<<<<<<< HEAD
 function abrir_popup_confirmacion(titulo, dato) {
     swal({
         title: titulo,
@@ -154,6 +164,8 @@ function abrir_popup_confirmacion(titulo, dato) {
     });
 }
 
+=======
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
 /**
  * FUNCION QUE MUESTRA UN POPUP DE ACEPTAR/CANCELAR
  * @param {Object} dato (para personalizar el popup)
@@ -169,4 +181,8 @@ function abrir_popup_accion(dato) {
         confirmButtonText: 'Si!',
         closeOnConfirm: true
     });
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9

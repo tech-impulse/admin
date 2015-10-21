@@ -56,7 +56,7 @@
         token = localStorage["youtter_admin_token"];
         $("#page").load("menu.html");
     }
-    if (localStorage["youtter_admin_username"] != undefined && localStorage["youtter_admin_username"] != "") {
+    if (localStorage["youtter_admin_username"] != undefined) {
         $("#emailLogin").val(localStorage["youtter_admin_username"]);
         $("#passwordLogin").val(localStorage["youtter_admin_password"]);
         $('#check_login_remember').prop('checked', true);
@@ -81,6 +81,9 @@
                 if ($('#check_login_remember').is(":checked")) {
                     localStorage["youtter_admin_username"] = $("#emailLogin").val();
                     localStorage["youtter_admin_password"] = $("#passwordLogin").val();
+                } else {
+                    localStorage.removeItem("youtter_admin_username");
+                    localStorage.removeItem("youtter_admin_password");
                 }
                 token = response.token;
                 localStorage["youtter_admin_token"] = token;

@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+=======
+<style>
+    #container2 {
+        position: relative;
+    }
+    
+    #navi,
+    .boton_borrar_galeria {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        text-align: right;
+        padding-right: 35px;
+    }
+</style>
+
+<h1>Galería multimedia</h1>
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
 <form class="form-inline">
     <div class="form-group">
         <button id="video-gallery-button" type="button" class="btn btn-success btn-lg">
@@ -10,7 +30,84 @@
         </button>
     </div>
 </form>
+<<<<<<< HEAD
 <hr>
 <div id="div_galeria">
 
 </div>
+=======
+
+<div class="row" style="margin-top:10px">
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <form method="post" action="upload-page.php" enctype="multipart/form-data">
+                <label for="filesToUpload">
+                    <img style="padding:40px; width: 160px; height: 150px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">
+                </label>
+                <input onChange="makeFileList();" multiple name="filesToUpload[]" id="filesToUpload" style="display:none" type="file" />
+            </form>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="http://codeforces.com/userphoto/title/pedobear/photo.jpg" />
+            <div class="boton_borrar_galeria">
+                <button onclick="abrir_popup_accion('La imagen será borrada del servidor!')" type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
+            </div>
+        </a>
+    </div>
+</div>
+<ul id="fileList"><li>No Files Selected</li></ul>
+<script>
+    get_galerias(0);
+    function makeFileList() {
+		var input = document.getElementById("filesToUpload");
+		var ul = document.getElementById("fileList");
+		while (ul.hasChildNodes()) {
+			ul.removeChild(ul.firstChild);
+		}
+		for (var i = 0; i < input.files.length; i++) {
+			var li = document.createElement("li");
+			li.innerHTML = input.files[i].name;
+			ul.appendChild(li);
+		}
+		if(!ul.hasChildNodes()) {
+			var li = document.createElement("li");
+			li.innerHTML = 'No Files Selected';
+			ul.appendChild(li);
+		}
+	}
+</script>
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9

@@ -2,13 +2,21 @@
  * FUNCION QUE RETORNA LA GALERIA MULTIMEDIA
  * @param {int} tipo Imagenes:0 ; Video:1
  */
+<<<<<<< HEAD
 function getGaleria(tipo) {
     var datos = {
         token: token,
+=======
+function get_galerias(tipo) {
+    var datos = {
+        token: token,
+        tipo: 0
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
     };
 
     peticion_actual = $.ajax({
         data: datos,
+<<<<<<< HEAD
         url: url + 'galeria/',
         type: 'GET',
         dataType: 'json',
@@ -85,6 +93,15 @@ function getPantallas(id) {
         },
         error: function (response) {
             rest_error(response, "pantallas");
+=======
+        url: url + 'galeria.php',
+        dataType: 'json',
+        success: function (response) {
+            restOk(response, "galeria_imagenes");
+        },
+        error: function (response) {
+            rest_error(response, "galeria_imagenes");
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
         },
     });
 }
@@ -99,6 +116,7 @@ function rest_ok(respuesta, tipo) {
     console.log("Todo correcto desde " + tipo);
     console.log("La respuesta es: ");
     console.log(respuesta);
+<<<<<<< HEAD
 
     if (respuesta != '{"error":"invalid token"}') {
         switch (tipo) {
@@ -128,6 +146,14 @@ function rest_ok(respuesta, tipo) {
         }
     } else {
         abrir_popup_confirmacion("Sesión Caducada!", "Debe volver a iniciar sesión");
+=======
+    switch (tipo) {
+    case "galeria_imagenes":
+        {
+            mostrar_galeria_imagenes(respuesta);
+            break;
+        };
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
     }
 }
 
@@ -141,6 +167,7 @@ function rest_error(respuesta, tipo) {
     console.log("La respuesta es: ");
     console.log(respuesta);
     switch (tipo) {
+<<<<<<< HEAD
     case "get_media":
         {
             // 
@@ -157,11 +184,17 @@ function rest_error(respuesta, tipo) {
             break;
         };
     case "pantallas":
+=======
+    case "galeria_imagenes":
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
         {
             // 
             break;
         };
     }
+<<<<<<< HEAD
     console.log(respuesta);
+=======
+>>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
     abrir_popup_informacion('Ha habido un error en la consulta!');
 }
