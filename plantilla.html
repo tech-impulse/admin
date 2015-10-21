@@ -1,0 +1,48 @@
+
+<div class="row" style="margin-top:10px">
+    <div class="col-lg-8">
+        <div id="div_galeria_plantilla"></div>
+
+    </div>
+    <div class="col-lg-4">
+        <div class="row" style="margin-top:10px">
+                <div class="img1">
+                    <img id='img1' width="100%" src="css/img/screen.png" />
+                    <img id='img2' width="85%" src="css/img/maqueta.png" />
+                    
+                </div>        
+        </div>
+        <div class="row" style="margin:10px; text-align:center; margin-left:7%">
+                <button type="button" class="btn btn-md" onclick="changeDisplay(-2)">
+                        <i class="glyphicon glyphicon-fast-backward"></i>
+                        <span></span>
+                    </button>
+                    <button type="button" class="btn btn-md" onclick="changeDisplay(-1)">
+                        <i class="glyphicon glyphicon-backward"></i>
+                        <span></span>
+                    </button>
+                    <button type="button" class="btn btn-md" onclick="playDisplay()">
+                        <i id="btnPlay" class="glyphicon glyphicon-play"></i>
+                        <span></span>
+                    </button>
+                    <button type="button" class="btn btn-md" onclick="changeDisplay(1)">
+                        <i class="glyphicon glyphicon-forward"></i>
+                        <span></span>
+                    </button>
+                <button type="button" class="btn btn-md" onclick="changeDisplay(2)">
+                        <i class="glyphicon glyphicon-fast-forward"></i>
+                        <span></span>
+                    </button>
+        </div>
+        <hr>
+        <div class="">
+            <ul class="list-group" style="margin:10px" id="ul_galeria_plantilla">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    refrescar_galeria(json, 'plantilla', columnasGaleria);
+</script>

@@ -1,0 +1,52 @@
+    #container2 {
+        position: relative;
+    }
+    
+    .boton_borrar_galeria {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        text-align: right;
+        padding-right: 35px;
+    }
+    
+    .thumb-big {
+        display: block;
+        padding: 4px;
+        margin-bottom: 20px;
+        line-height: 1.42857143;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        -webkit-transition: border .2s ease-in-out;
+        -o-transition: border .2s ease-in-out;
+        transition: border .2s ease-in-out;
+    }
+    
+    .thumb {
+        height: 60px;
+        border: 1px solid #000;
+        margin: 10px 5px 0 0;
+    }
+    
+    .img1 {
+        margin-left: 30px;
+        position: relative;
+    }
+    
+    #img2 {
+        position: absolute;
+        left: 2%;
+        width: 96%;
+        height: 92%;
+        top: 2%;
+    }
+    
+    .boton_check_galeria {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        text-align: left;
+    }
