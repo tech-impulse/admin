@@ -2,29 +2,22 @@
  * FUNCION QUE RETORNA LA GALERIA MULTIMEDIA
  * @param {int} tipo Imagenes:0 ; Video:1
  */
-<<<<<<< HEAD
+
 function getGaleria(tipo) {
     var datos = {
         token: token,
-=======
-function get_galerias(tipo) {
-    var datos = {
-        token: token,
-        tipo: 0
->>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
     };
 
     peticion_actual = $.ajax({
         data: datos,
-<<<<<<< HEAD
         url: url + 'galeria/',
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            rest_ok(response, "get_media");
+            rest_ok(response, tipo);
         },
         error: function (response) {
-            rest_error(response, "get_media");
+            rest_error(response, tipo);
         },
     });
 }
@@ -34,7 +27,6 @@ function postGaleria(arrayImagenes) {
         token: token,
         media: arrayImagenes
     };
-    console.log(datos);
     $.ajax({
         data: datos,
         url: url + 'galeria/',
@@ -42,8 +34,6 @@ function postGaleria(arrayImagenes) {
         dataType: 'json',
         success: function (response) {
             rest_ok(response, "post_media");
-            console.log(response);
-
         },
         error: function (response) {
             rest_error(response, "post_media");
@@ -55,7 +45,7 @@ function postGaleria(arrayImagenes) {
  * FUNCION QUE RETORNA LA LISTA DE PLANTILLAS
  * @param {int} id Id de la plantilla, si no está definido devuelve todas
  */
-function getPlantillas(id) {
+function getPlantillas(id, tipo) {
     var datos = {
         token: token,
     };
@@ -66,12 +56,41 @@ function getPlantillas(id) {
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            rest_ok(response, "plantillas");
+            rest_ok(response, tipo);
         },
         error: function (response) {
-            rest_error(response, "plantillas");
+            rest_error(response, tipo);
         },
     });
+}
+
+function postPlantillas(nombre, descripcion, arrayImagenes) {
+
+    for (var i = 0; i < arrayImagenes.length; i++) {
+        arrayImagenes[i].orden = i;
+    }
+    var datos = {
+        token: token,
+        nombre: nombre,
+        descipcion: descripcion,
+        media: arrayImagenes
+    };
+    test = datos;
+
+    console.log(datos);
+
+    peticion_actual = $.ajax({
+        data: datos,
+        url: url + 'plantilla/',
+        type: 'POST',
+        dataType: 'json',
+        success: function (response) {
+            rest_ok(response, "post_plantilla");
+        },
+        error: function (response) {
+            rest_error(response, "post_plantilla");
+        },
+    })
 }
 
 /**
@@ -93,15 +112,6 @@ function getPantallas(id) {
         },
         error: function (response) {
             rest_error(response, "pantallas");
-=======
-        url: url + 'galeria.php',
-        dataType: 'json',
-        success: function (response) {
-            restOk(response, "galeria_imagenes");
-        },
-        error: function (response) {
-            rest_error(response, "galeria_imagenes");
->>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
         },
     });
 }
@@ -113,47 +123,81 @@ function getPantallas(id) {
  */
 
 function rest_ok(respuesta, tipo) {
-    console.log("Todo correcto desde " + tipo);
-    console.log("La respuesta es: ");
+    console.log("WS OK -> Desde ->" + tipo);
+    console.log("Respuesta: ");
     console.log(respuesta);
-<<<<<<< HEAD
+
 
     if (respuesta != '{"error":"invalid token"}') {
         switch (tipo) {
-        case "get_media":
+        case "login":
             {
-                console.log(respuesta.galeria)
+                $("#page").load("menu.html", function () {
+                    getPantallas();
+                    $("#submenu").html('<li class="active">Pantallas</li>');
+                    $("#content").load("pantallas.html");
+                });
+
+                break;
+            };
+        case "galeria":
+            {
                 multimedia_disponible = respuesta.galeria;
-                console.log(multimedia_disponible);
-                refrescar_galeria(respuesta.galeria, 'galeria', 6);
+                for (var i = 0; i < multimedia_disponible.length; i++) {
+                    multimedia_disponible[i].url = url + 'show_image.php?token=' + token + '&id=' + multimedia_disponible[i].id_externo;
+                }
+                $("#content").load("galeria.html", function () {
+                    refrescar_galeria(multimedia_disponible, 'galeria', 6);
+                });
+
+                break;
+            };
+        case "galeria_plantilla":
+            {
+                multimedia_seleccionada = [];
+                multimedia_disponible = respuesta.galeria;
+                for (var i = 0; i < multimedia_disponible.length; i++) {
+                    multimedia_disponible[i].url = url + 'show_image.php?token=' + token + '&id=' + multimedia_disponible[i].id_externo;
+                }
+                $("#content").load("plantilla.html", function () {
+                    refrescar_galeria(multimedia_disponible, 'plantilla', 6);
+                });
+
                 break;
             };
         case "post_media":
             {
-                console.log(respuesta)
+                getGaleria('galeria');
                 break;
             };
         case "plantillas":
             {
-                console.log(respuesta);
+                cargar_plantillas('plantillas');
+                break;
+            };
+        case "programacion":
+            {
+                $("#content").load("programacion.html", function () {
+                    cargar_plantillas('programacion');
+                });
+
+                break;
+            };
+        case "post_plantilla":
+            {
+
                 break;
             };
         case "pantallas":
             {
-                console.log(respuesta);
+                $("#content").load("pantallas.html", function () {
+                    cargar_pantallas(respuesta, 'pantallas', 'paises');;
+                });
                 break;
             };
         }
     } else {
         abrir_popup_confirmacion("Sesión Caducada!", "Debe volver a iniciar sesión");
-=======
-    switch (tipo) {
-    case "galeria_imagenes":
-        {
-            mostrar_galeria_imagenes(respuesta);
-            break;
-        };
->>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
     }
 }
 
@@ -163,11 +207,15 @@ function rest_ok(respuesta, tipo) {
  * @param {String} tipo      Quien ha hecho la petición
  */
 function rest_error(respuesta, tipo) {
-    console.log("Algo ha ido mal desde " + tipo);
-    console.log("La respuesta es: ");
+    console.log("WS ERROR -> Desde -> " + tipo);
+    console.log("Respuesta: ");
     console.log(respuesta);
     switch (tipo) {
-<<<<<<< HEAD
+    case "login":
+        {
+            //
+            break;
+        };
     case "get_media":
         {
             // 
@@ -183,18 +231,22 @@ function rest_error(respuesta, tipo) {
             // 
             break;
         };
+    case "post_plantilla":
+        {
+
+            break;
+        };
     case "pantallas":
-=======
-    case "galeria_imagenes":
->>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
         {
             // 
             break;
         };
     }
-<<<<<<< HEAD
-    console.log(respuesta);
-=======
->>>>>>> 89c40bd336860a8550f7a458e19cb7628939ddf9
     abrir_popup_informacion('Ha habido un error en la consulta!');
+}
+
+function logout() {
+    token = '';
+    localStorage.removeItem("youtter_admin_token");
+    $("#page").load("index.html");
 }

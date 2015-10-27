@@ -1,1 +1,33 @@
-PANTALLAS
+<div id="div_programacion_pantalla">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div id="div_programacion_paises">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" id="filtrar_pantallas_pais" placeholder="Buscar por país.." />
+                    <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                </div>
+                <div id="div_programacion_paises_lista"></div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div id='div_programacion_provincias'></div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div id='div_programacion_pantallas'></div>
+        </div>
+    </div>
+</div>
+<script>
+    
+$('#filtrar_pantallas_pais').on('keyup', function () {        
+        var palabra = this.value;
+        var datos;
+        if (this.value.length > 1) {
+            datos = filtra_datos(palabra, array_pantallas[0].resultado, 'nombre');
+            cargar_pantallas(datos, 'programacion', 'paises');
+        } else {
+            datos = array_pantallas[0].resultado;
+            cargar_pantallas(datos, 'programacion', 'paises');
+        }
+    }); 
+</script>

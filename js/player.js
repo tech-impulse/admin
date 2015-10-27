@@ -49,10 +49,10 @@ function refrescar_player() {
             var duracion = parseInt(multimedia_seleccionada[i].duracion);
             var img = '<img class="thumb" src="' + multimedia_seleccionada[i].url + '"/>';
             html = html + '<li class="list-group-item" id="line' + i + '"><div class="row"><div class="col-lg-3">' + img + '</div>' +
-                '<div class="col-lg-4"><center>'+
-                '<input onchange="multimedia_seleccionada['+i+'].duracion=this.value" value="'+duracion+'" type="number" style="font-size:20px; margin:20px; width:80px; text-align:center; border-radius:5px" min="0" max="999"></center></div>' +
-                '<div class="col-lg-2"><button class="btn glyphicon glyphicon-arrow-up" style="margin:1px" onclick="mover_elemento(' + i + ', -1)"></button>' +
-                '<button class="btn glyphicon glyphicon-arrow-down" onclick="mover_elemento(' + i + ', 1)"></button></div>' +
+                '<div class="col-lg-4"><center>' +
+                '<input onchange="multimedia_seleccionada[' + i + '].duracion=this.value" value="' + duracion + '" type="number" style="font-size:20px; margin:20px; width:80px; text-align:center; border-radius:5px" min="0" max="999"></center></div>' +
+                '<div class="col-lg-2"><button class="btn btn-sm glyphicon glyphicon-arrow-up" style="margin:1px" onclick="mover_elemento(' + i + ', -1)"></button>' +
+                '<button class="btn btn-sm glyphicon glyphicon-arrow-down" onclick="mover_elemento(' + i + ', 1)"></button></div>' +
                 '<div class="col-lg-3"><h4><button class="btn btn-lg btn-danger" onclick="eliminar_multimedia(' + multimedia_seleccionada[i].id_externo + ')"> <i class="glyphicon glyphicon-trash"></i><span></span></button></h4></div></li>';
         }
     }
@@ -75,21 +75,25 @@ var secuencePosition = 0;
 
 
 function playDisplay() {
-    if ($("#btnPlay").hasClass("glyphicon-play") && multimedia_seleccionada.length > 0) {
-        $("#btnPlay").toggleClass('glyphicon-play glyphicon-pause');
-        document.getElementById("img2").src = multimedia_seleccionada[secuencePosition].url;
-        playSecuence = setInterval(function () {
+    if (multimedia_seleccionada.length != undefined) {
+        if ($("#btnPlay").hasClass("glyphicon-play") && multimedia_seleccionada.length > 0) {
+            $("#btnPlay").toggleClass('glyphicon-play glyphicon-pause');
             document.getElementById("img2").src = multimedia_seleccionada[secuencePosition].url;
-            if ((secuencePosition) == (multimedia_seleccionada.length - 1)) {
-                secuencePosition = 0;
-            } else {
-                secuencePosition++;
-            }
-        }, 3000);
-    } else {
-        $("#btnPlay").removeClass('glyphicon-pause');
-        $("#btnPlay").addClass('glyphicon-play');
-        clearInterval(playSecuence);
+            playSecuence = setInterval(function () {
+                document.getElementById("img2").src = multimedia_seleccionada[secuencePosition].url;
+                if ((secuencePosition) == (multimedia_seleccionada.length - 1)) {
+                    secuencePosition = 0;
+                } else {
+                    secuencePosition++;
+                }
+            }, 3000);
+        } else {
+            $("#btnPlay").removeClass('glyphicon-pause');
+            $("#btnPlay").addClass('glyphicon-play');
+            clearInterval(playSecuence);
+        }
+    } else{
+        $("#img2").attr("src","css/img/maqueta.png");
     }
 
 }

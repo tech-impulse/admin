@@ -1,1 +1,79 @@
-PROGRAMACION
+<div id="div_programacion_plantilla">
+</div>
+<div id="div_programacion_pantalla">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div id="div_programacion_paises">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" id="filtrar_pantallas_pais" placeholder="Buscar por país.." />
+                    <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                </div>
+                <div id="div_programacion_paises_lista"></div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div id='div_programacion_provincias'></div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div id='div_programacion_pantallas'></div>
+        </div>
+    </div>
+</div>
+<div id="div_programacion_calendario">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div id="div_programacion_menu"></div>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-6">
+            <div id='calendar'></div>
+        </div>
+    </div>
+</div>
+<script>
+    
+$('#filtrar_pantallas_pais').on('keyup', function () {        
+        var palabra = this.value;
+        var datos;
+        if (this.value.length > 1) {
+            datos = filtra_datos(palabra, array_pantallas[0].resultado, 'nombre');
+            cargar_pantallas(datos, 'programacion', 'paises');
+        } else {
+            datos = array_pantallas[0].resultado;
+            cargar_pantallas(datos, 'programacion', 'paises');
+        }
+    });
+
+    
+    
+</script>
+
+<!--
+{
+    "respuesta": "ok",
+    "resultado": [
+        {
+            "id_externo": "1",
+            "nombre": "Despacho Youtter",
+            "MAC": "b827ebc6bd8e",
+            "tipo_pantalla": null,
+            "numero_pantalla": null,
+            "horario_desde": "8",
+            "horario_hasta": "22",
+            "lunes": "1",
+            "martes": "1",
+            "miercoles": "1",
+            "jueves": "1",
+            "viernes": "1",
+            "sabado": "1",
+            "domingo": "1",
+            "festivos": null,
+            "direccion": "Avda. Torreblanca 57 ",
+            "poblacion": "SANT CUGAT DEL VALLES",
+            "codigo_postal": "08173",
+            "pais": "Espa",
+            "latitudGPS": null,
+            "longitudGPS": null
+        }
+    ]
+}
+-->
