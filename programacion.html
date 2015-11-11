@@ -1,24 +1,5 @@
 <div id="div_programacion_plantilla">
 </div>
-<div id="div_programacion_pantalla">
-    <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-12">
-            <div id="div_programacion_paises">
-                <div class="form-group has-feedback">
-                    <input type="text" class="form-control" id="filtrar_pantallas_pais" placeholder="Buscar por país.." />
-                    <i class="glyphicon glyphicon-search form-control-feedback"></i>
-                </div>
-                <div id="div_programacion_paises_lista"></div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-            <div id='div_programacion_provincias'></div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-            <div id='div_programacion_pantallas'></div>
-        </div>
-    </div>
-</div>
 <div id="div_programacion_calendario">
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6">
@@ -29,51 +10,52 @@
         </div>
     </div>
 </div>
+<div id="div_programacion_pantalla">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div id="div_programacion_paises">
+                <div id="div_programacion_paises_lista"></div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-12">
+            <div id='div_programacion_pantallas'>
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" id="filtrar_pantallas" placeholder="Buscar por Código Postal..." />
+                    <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                </div>
+                <div id="div_programacion_pantallas_lista"></div>
+                <center>
+                    <button id="btn_pantallas_continuar" onclick="pre_calendario()" style="display:none" type="button" class="btn btn-success btn-md">
+                        <i class="glyphicon glyphicon-ok"></i> Continuar
+                    </button>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     
-$('#filtrar_pantallas_pais').on('keyup', function () {        
+function pre_calendario(){
+            var array = [];
+            for(var i = 0; i < array_pantallas.length; i++){
+                if(array_pantallas[i].seleccionada){
+                    array.push(array_pantallas[i].id_externo);
+                }                
+            }
+            console.log(array);
+            nueva_programacion['id_pantallas'] = array;
+            cargar_calendario();
+            
+    }
+    $('#filtrar_pantallas').on('keyup', function () {
         var palabra = this.value;
         var datos;
         if (this.value.length > 1) {
-            datos = filtra_datos(palabra, array_pantallas[0].resultado, 'nombre');
-            cargar_pantallas(datos, 'programacion', 'paises');
+            datos = filtra_datos(palabra, array_pantallas, 'codigo_postal');
+            cargar_pantallas(datos, 'pantallas', 'pantallas');
         } else {
-            datos = array_pantallas[0].resultado;
-            cargar_pantallas(datos, 'programacion', 'paises');
+            datos = array_pantallas;
+            cargar_pantallas(datos, 'pantallas', 'pantallas');
         }
     });
-
-    
-    
 </script>
-
-<!--
-{
-    "respuesta": "ok",
-    "resultado": [
-        {
-            "id_externo": "1",
-            "nombre": "Despacho Youtter",
-            "MAC": "b827ebc6bd8e",
-            "tipo_pantalla": null,
-            "numero_pantalla": null,
-            "horario_desde": "8",
-            "horario_hasta": "22",
-            "lunes": "1",
-            "martes": "1",
-            "miercoles": "1",
-            "jueves": "1",
-            "viernes": "1",
-            "sabado": "1",
-            "domingo": "1",
-            "festivos": null,
-            "direccion": "Avda. Torreblanca 57 ",
-            "poblacion": "SANT CUGAT DEL VALLES",
-            "codigo_postal": "08173",
-            "pais": "Espa",
-            "latitudGPS": null,
-            "longitudGPS": null
-        }
-    ]
-}
--->

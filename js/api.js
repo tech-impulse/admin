@@ -72,7 +72,7 @@ function postPlantillas(nombre, descripcion, arrayImagenes) {
     var datos = {
         token: token,
         nombre: nombre,
-        descipcion: descripcion,
+        descripcion: descripcion,
         media: arrayImagenes
     };
     test = datos;
@@ -92,6 +92,45 @@ function postPlantillas(nombre, descripcion, arrayImagenes) {
         },
     })
 }
+
+function deletePlantilla(id) {
+    var datos = {
+        token: token,
+        id_externo: id,
+    };
+    peticion_actual = $.ajax({
+        url: url + 'plantilla/'+ '?token=' + token + '&id_externo='+id,
+        type: 'DELETE',
+        dataType: 'json',
+        success: function (response) {
+            rest_ok(response, "delete_plantilla");
+        },
+        error: function (response) {
+            rest_error(response, "delete_plantilla");
+        },
+    })
+}
+
+function getPaises(origen) {
+    var datos = {
+        token: token
+    };
+    peticionActual = $.ajax({
+        data: datos,
+        url: url + 'paises/',
+        dataType: 'json',
+        success: function (response) {
+            if(origen == 'programacion'){
+               rest_ok(response, "programacion_paises"); 
+            } else{
+               rest_ok(response, "pantallas_paises"); 
+            }             
+        },
+        error: function (response) {
+            rest_error(response, "pantallas_paises");
+        },
+    })
+};
 
 /**
  * FUNCION QUE RETORNA LA LISTA DE PANTALLAS DISPONIBLES
@@ -132,8 +171,9 @@ function rest_ok(respuesta, tipo) {
         switch (tipo) {
         case "login":
             {
+                console.log("Login ok");
                 $("#page").load("menu.html", function () {
-                    getPantallas();
+                    getPaises(); 
                     $("#submenu").html('<li class="active">Pantallas</li>');
                     $("#content").load("pantallas.html");
                 });
@@ -172,26 +212,53 @@ function rest_ok(respuesta, tipo) {
             };
         case "plantillas":
             {
+                array_plantillas = respuesta.resultado;
                 cargar_plantillas('plantillas');
                 break;
             };
         case "programacion":
             {
                 $("#content").load("programacion.html", function () {
+                    array_plantillas = respuesta.resultado;
                     cargar_plantillas('programacion');
                 });
 
                 break;
             };
+        case "programacion_paises":
+            {
+                $("#div_programacion_plantilla").hide();
+                $("#div_programacion_pantalla").show();
+                $("#div_programacion_calendario").hide();
+                array_paises = respuesta;
+                cargar_pantallas(respuesta, 'pantallas', 'paises');
+                getPantallas();
+                break;
+            };
         case "post_plantilla":
             {
-
+                console.log("plantilla guardada");
+                break;
+            };
+        case "delete_plantilla":
+            {
+                getPlantillas('', 'plantillas');
+                console.log("plantilla borrada");
                 break;
             };
         case "pantallas":
             {
+                    array_pantallas = respuesta.resultado;
+                    array_pantallas.seleccionadas = 0;
+                    cargar_pantallas(array_pantallas, 'pantallas', 'pantallas');
+                break;
+            };
+        case "pantallas_paises":
+            {
                 $("#content").load("pantallas.html", function () {
-                    cargar_pantallas(respuesta, 'pantallas', 'paises');;
+                    array_paises = respuesta;
+                    cargar_pantallas(respuesta, 'pantallas', 'paises');
+                    getPantallas();
                 });
                 break;
             };
@@ -239,6 +306,11 @@ function rest_error(respuesta, tipo) {
     case "pantallas":
         {
             // 
+            break;
+        };
+    case "pantallas_paises":
+        {
+            //
             break;
         };
     }

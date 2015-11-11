@@ -2,46 +2,12 @@
  * FUNCIÓN QUE MUESTRA POR PANTALLA LAS IMAGENES DE LA GALERIA
  * @param {Object} imagenes (Json con la información de las imagenes)
  */
-
-
-var json = [{
-    "id_externo": 1,
-    "url": "http://codeforces.com/userphoto/title/pedobear/photo.jpg",
-    "seleccionada": 0,
-    "duracion": 0
-}, {
-    "id_externo": 2,
-    "url": "https://upload.wikimedia.org/wikipedia/en/2/28/Philip_Fry.png",
-    "seleccionada": 0,
-    "duracion": 0
-}, {
-    "id_externo": 3,
-    "url": "http://sergiodelmolino.files.wordpress.com/2010/02/evasee-bender-smoking-3310.jpg",
-    "seleccionada": 0,
-    "duracion": 0
-}, {
-    "id_externo": 4,
-    "url": "https://image.freepik.com/foto-gratis/hrc-tigre-siberiano-2-jpg_21253111.jpg",
-    "seleccionada": 0,
-    "duracion": 0
-}, {
-    "id_externo": 5,
-    "url": "http://l3.yimg.com/bt/api/res/1.2/CutqJJgH26Mx0nvNqyGtmQ--/YXBwaWQ9eW5ld3M7Zmk9aW5zZXQ7aD00NTU7cT04NTt3PTYzMA--/http://l.yimg.com/os/259/2012/09/06/AP492232600255-jpg_203639.jpg",
-    "seleccionada": 0,
-    "duracion": 0
-}, {
-    "id_externo": 6,
-    "url": "http://images.eurogamer.net/articles//a/1/0/2/4/8/8/1/AA_003.jpg.jpg",
-    "seleccionada": 0,
-    "duracion": 0
-}];
-
 function cargar_pagina(pantalla) {
     $("#barMenu li").removeClass("active");
     $("#btn_menu_" + pantalla).toggleClass("active");
     switch (pantalla) {
     case 'pantallas':
-        getPantallas();
+        getPaises();
         $("#submenu").html('<li class="active">Pantallas</li>');
         $("#content").load("pantallas.html");
         break;
@@ -52,7 +18,6 @@ function cargar_pagina(pantalla) {
     case 'galeria':
         getGaleria('galeria');
         $("#submenu").html('<li class="active">Galeria</li>');
-
         break;
     case 'plantillas':
         getPlantillas('', 'plantillas');
@@ -106,7 +71,11 @@ function refrescar_galeria(imagenes, origen, columnas) {
     }
 }
 
-function cargar_plantillas(tipo) {
+/**
+ * FUNCION QUE CARGA POR PANTALLA LAS PLANTILLAS SEGÚN EL ORIGEN
+ * @param {String} origen [Desde donde estas llamando a la funcion (programacion o plantillas)]
+ */
+function cargar_plantillas(origen) {
     var editabe = '';
     var funcionalidad = '';
     var row = '<div class="row" style="margin-top:10px">';
@@ -115,12 +84,12 @@ function cargar_plantillas(tipo) {
 
     for (var i = 0; i < array_plantillas.length; i++) {
 
-        if (tipo == 'programacion') {
+        if (origen == 'programacion') {
             //funcionalidad = 'onclick="seleccionar_plantilla('+array_plantillas[i].id_plantilla+', '+array_plantillas[i].plantilla_nombre+')"';
-            editabe = '<p><a href="#" class="btn btn-success" role="button" onclick="seleccionar_plantilla(' + array_plantillas[i].id_plantilla + ',\'' +
-                array_plantillas[i].plantilla_nombre + '\')">Seleccionar</a></p>';
+            editabe = '<p><a href="#" class="btn btn-success" role="button" onclick="seleccionar_plantilla(' + array_plantillas[i].id_externo + ',\'' +
+                array_plantillas[i].nombre + '\')">Seleccionar</a></p>';
         } else {
-            editabe = '<p><a href="#" class="btn btn-primary" role="button">Editar</a> <a href="#" onclick="abrir_popup_accion(\'Desea eliminar esta plantilla?\')" class="btn btn-default glyphicon glyphicon-trash" role="button"></a></p>';
+            editabe = '<p><a href="#" class="btn btn-primary" role="button">Editar</a> <a href="#" onclick="abrir_popup_accion(\'Desea eliminar esta plantilla?\', '+array_plantillas[i].id_externo+')" class="btn btn-default glyphicon glyphicon-trash" role="button"></a></p>';
         }
 
         if (cont == 6 || cont == 0) {
@@ -130,10 +99,10 @@ function cargar_plantillas(tipo) {
         }
         html = html + '<div class="col-sm-6 col-md-4 col-lg-2" ' + funcionalidad + '>' +
             '<div class="thumbnail">' +
-            '<img src="' + array_plantillas[i].url + '" alt="...">' +
+            '<img class="img_plantilla" src="http://testhtml5.esadecreapolis.com/ws/show_image.php?token=' + token + "&id="+ array_plantillas[i].elementos[0].id_externo + '" alt="...">' +
             '<div class="caption">' +
-            '<h3>' + array_plantillas[i].plantilla_nombre + '</h3>' +
-            '<p>' + array_plantillas[i].plantilla_descripcion + '</p>' +
+            '<h3>' + array_plantillas[i].nombre + '</h3>' +
+            '<p>' + array_plantillas[i].descripcion + '</p>' +
             editabe +
             '</div>' +
             '</div>' +
@@ -142,7 +111,7 @@ function cargar_plantillas(tipo) {
         cont++;
     }
     html = html + '</div>';
-    if (tipo == 'programacion') {
+    if (origen == 'programacion') {
         $("#div_programacion_pantalla").hide();
         $("#div_programacion_calendario").hide();
         $("#div_programacion_plantilla").html(html);
@@ -152,6 +121,11 @@ function cargar_plantillas(tipo) {
     }
 }
 
+/**
+ * FUNCION QUE SE LLAMA TRAS SELECCIONAR UNA PLANTILLA
+ * @param {Number} id     [Id de la pantalla seleccionada]
+ * @param {String} nombre [Nombre de la plantilla seleccionada]
+ */
 function seleccionar_plantilla(id, nombre) {
     var html = '<div class="list-group"><a href="#" class="list-group-item" onclick="cargar_plantillas(\'programacion\')">Plantilla Seleccionada: ' + nombre + '</a>' +
         '<a href="#" class="list-group-item active"> Configuración</a>' +
@@ -162,76 +136,131 @@ function seleccionar_plantilla(id, nombre) {
         '<h5 id="programacion_informacion_evento"></h5>' +
         '<h5 id="programacion_informacion_start"></h5>' +
         '<h5 id="programacion_informacion_end"></h5>' +
-        '<h5 id="programacion_informacion_minTime"></h5>' +
-        '<h5 id="programacion_informacion_maxTime"></h5>' +
+        '<h5 id="programacion_informacion_hora_inicio"></h5>' +
+        '<h5 id="programacion_informacion_hora_final"></h5>' +
         '<h5 id="programacion_informacion_anual"></h5>' +
         '<h5 id="programacion_informacion_allDay"></h5>' +
         '</div>';
     nueva_programacion.id_plantilla = id;
     $("#div_programacion_plantilla").hide();
     $("#div_programacion_menu").html(html);
-
     $("#div_programacion_pantalla").show();
-    cargar_pantallas(null, 'programacion', 'paises');
-    /*
-    $("#div_programacion_calendario").show();
-    cargar_calendario();
-    */
+    getPaises('programacion');
+    console.log("Selecciona la pantallas");
 }
 
+/**
+ * FUNCION QUE MUESTRA LA LISTA DE PANTALLAS
+ * @param {Object}   datos  [Datos de origen en formato JSON]
+ * @param {String} tipo   [Tipo de lista que quiero mostrar (Paises, Provincias o Pantallas)]
+ */
 function cargar_pantallas(datos, origen, tipo) {
-    if (datos == null) {
-        datos = array_pantallas[0].resultado;
-    } else {
-        datos = datos.resultado;
-    }
+    auxiliar = datos;
     switch (tipo) {
     case 'paises':
-        var html = '<h3>Seleccione un país</h3><div class="list-group">' +
-            '<a href ="#" class="list-group-item" onclick="seleccionar_pantalla(-1, this)">Todas</a>';
-
+        datos = array_paises;
+        var html = '<div class="list-group">' +
+            '<a href ="#" class="list-group-item" onclick="seleccionar_pais(-1, this)">Todos</a>';
         for (var i = 0; i < datos.length; i++) {
             if (datos[i].seleccionada) {
-                html = html + '<a href="#" class="list-group-item active" onclick="seleccionar_pantalla(' + i + ', this)">' + datos[i].nombre + '</a>';
+                html = html + '<a href="#" class="list-group-item active" onclick="seleccionar_pais(' + i + ', this)">' + datos[i].nombre + '</a>';
             } else {
-                html = html + '<a href="#" class="list-group-item" onclick="seleccionar_pantalla(' + i + ', this)">' + datos[i].nombre + '</a>';
+                html = html + '<a href="#" class="list-group-item" onclick="seleccionar_pais(' + i + ', this)">' + datos[i].nombre + '</a>';
             }
         }
-        html = html + '</div>' +
-            '<center><button type="button" class="btn btn-success">Aplicar Filtro</button></center>';
-
-        if (origen == 'programacion' || origen == 'pantallas') {
-            $("#div_programacion_paises_lista").html(html);
-        }
+        html = html + '</div>';
+        $("#div_programacion_paises_lista").html(html);
         break;
     case 'provincias':
 
         break;
     case 'pantallas':
-
+        if (datos == null) {
+            for (var i = 0; i < array_pantallas.length; i++) {
+                array_pantallas[i].seleccionada = false;
+            }
+            array_pantallas.seleccionadas = 0;
+            $("#btn_pantallas_continuar").hide();
+        }
+        datos = array_pantallas;
+        var html = '<div class="list-group">' +
+            '<a href ="#" class="list-group-item" onclick="seleccionar_pantalla(-1, this)">Todas</a>';
+        for (var i = 0; i < datos.length; i++) {
+            if (datos[i].seleccionada) {
+                html = html + '<a href="#" class="list-group-item active" onclick="seleccionar_pantalla(' + i + ', this)"><strong>' +
+                    datos[i].nombre + ':</strong> ( ' +
+                    datos[i].direccion + ', '
+                datos[i].poblacion + ', '
+                datos[i].codigo_postal +
+                    ')</a>';
+            } else {
+                html = html + '<a href="#" class="list-group-item" onclick="seleccionar_pantalla(' + i + ', this)"><strong>' +
+                    datos[i].nombre + ':</strong> ( ' +
+                    datos[i].direccion + ', ' +
+                    datos[i].poblacion + ', ' +
+                    datos[i].codigo_postal +
+                    ')</a>';
+            }
+        }
+        html = html + '</div>';
+        $("#div_programacion_pantallas_lista").html(html);
         break;
     }
 }
 
-function seleccionar_pantalla(pos, elemento) {
+/**
+ * FUNCION QUE SELECCIONA UN PAIS
+ * @param {Number} pos      [Posición del elemento seleccionado]
+ * @param {Object} elemento [Elemento HTML seleccionado]
+ */
+function seleccionar_pais(pos, elemento) {
     console.log("POS " + pos);
     if (pos == -1) {
-        var html = '<div class="list-group"><a href ="#" class="list-group-item active" onclick="cargar_pantallas(null,\'programacion\', \'paises\')">Todas</a></div>';
+        var html = '<div class="list-group"><a href ="#" class="list-group-item active" onclick="cargar_pantallas(null,\'programacion\', \'paises\')">Todos</a></div>';
         $("#div_programacion_paises_lista").html(html);
     } else {
-        if (array_pantallas[0].resultado[pos].seleccionada == undefined || array_pantallas[0].resultado[pos].seleccionada == false) {
+        if (array_paises[pos].seleccionada == undefined || array_paises[pos].seleccionada == false) {
             $(elemento).addClass('active');
-            array_pantallas[0].resultado[pos].seleccionada = true;
+            array_paises[pos].seleccionada = true;
         } else {
             $(elemento).removeClass('active');
-            array_pantallas[0].resultado[pos].seleccionada = false;
+            array_paises[pos].seleccionada = false;
         }
     }
 }
 
-function filtrar_pantallas(origen) {
-
+/**
+ * FUNCION QUE SELECCIONA UNA PANTALLA
+ * @param {Number} pos      [Posición del elemento seleccionado]
+ * @param {Object} elemento [Elemento HTML seleccionado]
+ */
+function seleccionar_pantalla(pos, elemento) {
+    console.log("POS " + pos);
+    if (pos == -1) {
+        var html = '<div class="list-group"><a href ="#" class="list-group-item active" onclick="cargar_pantallas(null,\'programacion\', \'pantallas\')">Todas</a></div>';
+        for (var i = 0; i < array_pantallas.length; i++) {
+            array_pantallas[i].seleccionada = true;
+        }
+        array_pantallas.seleccionadas = array_pantallas.length;
+        $("#div_programacion_pantallas_lista").html(html);
+    } else {
+        if (array_pantallas[pos].seleccionada == undefined || array_pantallas[pos].seleccionada == false) {
+            $(elemento).addClass('active');
+            array_pantallas[pos].seleccionada = true;
+            array_pantallas.seleccionadas = array_pantallas.seleccionadas + 1;
+        } else {
+            $(elemento).removeClass('active');
+            array_pantallas[pos].seleccionada = false;
+            array_pantallas.seleccionadas = array_pantallas.seleccionadas - 1;
+        }
+    }
+    if (array_pantallas.seleccionadas > 0) {
+        $("#btn_pantallas_continuar").show();
+    } else {
+        $("#btn_pantallas_continuar").hide();
+    }
 }
+
 
 /**
  * FUNCION QUE CARGA EN UN ARRAY LAS IMAGENES EN BASE64 SELECCIONADAS PARA ENVIARLAS AL WS GALERIA
@@ -283,7 +312,7 @@ function abrir_popup_confirmacion(titulo, dato) {
  * FUNCION QUE MUESTRA UN POPUP DE ACEPTAR/CANCELAR
  * @param {Object} dato (para personalizar el popup)
  */
-function abrir_popup_accion(dato) {
+function abrir_popup_accion(dato, id) {
     swal({
         title: 'Esta seguro?',
         text: dato,
@@ -293,10 +322,15 @@ function abrir_popup_accion(dato) {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si!',
         closeOnConfirm: true
-    });
+    }, function () {
+            deletePlantilla(id);
+        });
 }
 
-function abrir_popup_guardar_plantilla(dato) {
+/**
+ * FUNCION QUE MUESTRA EL POPUP DE GUARDAR PLANTILLA
+ */
+function abrir_popup_guardar_plantilla() {
     var check = true;
     var mensaje;
     for (var i = 0; i < multimedia_seleccionada.length; i++) {
@@ -339,13 +373,33 @@ function abrir_popup_guardar_plantilla(dato) {
     }
 }
 
-function filtra_datos(palabra, datos, filtro){
-        var datos_filtrados = datos.filter(function (row) {
-                if (row[filtro].match(palabra)) {                    
-                    return true
-                } else {
-                    return false;
-                }
-            });
-        return datos_filtrados;
+/**
+ * FUNCION QUE PERMITE FILTRAR EN UN JSON DE UN SOLO NIVEL
+ * @param   {String} palabra [Palabra por la cual vas a filtrar]
+ * @param   {Object} datos   [JSON de datos a filtrar]
+ * @param   {String} filtro  [Tipo de filtro por el que se va a aplicar (nombre, codigo postal, etc)]
+ * @returns {JSON}   [RRetorna el mismo JSON con los elementos filtrados]
+ */
+function filtra_datos(palabra, datos, filtro) {
+    console.log("Filtrar " + palabra);
+    var datos_filtrados = datos.filter(function (row) {
+        if (row[filtro].match(palabra)) {
+            return true
+        } else {
+            return false;
+        }
+    });
+    return datos_filtrados;
+}
+
+$('#filtrar_pantallas').on('keyup', function () {
+    var palabra = this.value;
+    var datos;
+    if (this.value.length > 1) {
+        datos = filtra_datos(palabra, array_pantallas, 'codigo_postal');
+        cargar_pantallas(datos, 'pantallas', 'pantallas');
+    } else {
+        datos = array_pantallas;
+        cargar_pantallas(datos, 'pantallas', 'pantallas');
     }
+});

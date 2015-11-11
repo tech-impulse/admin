@@ -57,6 +57,7 @@
     </div>
 </body>
 <script>
+    login();
     $('#form_login').submit(function () {
         login();
         return false;
@@ -73,9 +74,9 @@
 
 
     function login() {
-        var pass = CryptoJS.MD5($("#passwordLogin").val()).toString();
+        var pass = CryptoJS.MD5('pruebas').toString();
         var datos = {
-            usuario: $("#emailLogin").val(),
+            usuario: 'pruebas',
             password: pass
         };
 

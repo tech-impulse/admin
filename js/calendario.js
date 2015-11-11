@@ -1,8 +1,9 @@
 
-
  function cargar_calendario() {
-
-
+     $("#div_programacion_plantilla").hide();
+     $("#div_programacion_pantalla").hide();
+     $("#div_programacion_calendario").show();
+     
      $('#calendar').fullCalendar({
          dayClick: function (date, jsEvent, view) {
              testSwal(date.format());
@@ -25,8 +26,8 @@
              if(calEvent.allDay){
                  allDay = "Si";
              } else{
-                 $("#programacion_informacion_minTime").text("Hora de incio del evento: " + calEvent.minTime);
-                 $("#programacion_informacion_maxTime").text("Hora fin del evento: " + calEvent.maxTime);
+                 $("#programacion_informacion_hora_inicio").text("Hora de incio del evento: " + calEvent.hora_inicio);
+                 $("#programacion_informacion_hora_final").text("Hora fin del evento: " + calEvent.hora_final);
                  allDay = "No";
              }
              
@@ -38,8 +39,8 @@
              $("#programacion_informacion_evento").text('');
              $("#programacion_informacion_start").text('');
              $("#programacion_informacion_end").text('');
-             $("#programacion_informacion_minTime").text('');
-             $("#programacion_informacion_maxTime").text('');
+             $("#programacion_informacion_hora_inicio").text('');
+             $("#programacion_informacion_hora_final").text('');
              $("#programacion_informacion_anual").text('');
              $("#programacion_informacion_allDay").text('');
          },
@@ -183,12 +184,12 @@
                  nueva_programacion.anual = false;
              }
              if ($('#check_popup_programacion_horario').is(":checked")) {
-                 nueva_programacion.minTime = '00:00:00';
-                 nueva_programacion.maxTime = '00:00:00';
+                 nueva_programacion.hora_inicio = '00:00:00';
+                 nueva_programacion.hora_final = '00:00:00';
                  nueva_programacion.allDay = true;
              } else {
-                 nueva_programacion.minTime = hinicio;
-                 nueva_programacion.maxTime = hfinal;
+                 nueva_programacion.hora_inicio = hinicio;
+                 nueva_programacion.hora_final = hfinal;
                  nueva_programacion.allDay = false;
              }
              //calendarData.push(nueva_programacion);
@@ -229,8 +230,8 @@
              console.log(evento);
              $('#datetimepicker1').data("DateTimePicker").date(evento.start);
              $('#datetimepicker2').data("DateTimePicker").date(evento.end);
-             $('#datetimepicker3').data("DateTimePicker").date(evento.minTime);
-             $('#datetimepicker4').data("DateTimePicker").date(evento.maxTime);
+             $('#datetimepicker3').data("DateTimePicker").date(evento.hora_inicio);
+             $('#datetimepicker4').data("DateTimePicker").date(evento.hora_final);
              $("#in_popup_programacion").val(evento.title);
              $("#btn_popup_programacion").show();
              if (evento.anual) {
