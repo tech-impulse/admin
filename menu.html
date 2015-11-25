@@ -1,5 +1,14 @@
 <script src="lib/swal/sweetalert2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/swal/sweetalert2.css">
+<div data-role="popup" id="popup_cargando" class="popupCargando" data-theme="none">
+    <center>
+        <br>
+        <div>
+            <img src="css/img/cargando.gif">
+        </div>
+        <label id="lb_cargando" style="font-size: 30px; color:white;">Cargando...</label>
+    </center>
+</div>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -19,9 +28,11 @@
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-                <a id="btn_menu_opciones" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"> <i class="glyphicon glyphicon-cog"></i></a>
+                <a id="btn_menu_opciones" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"> <i class="glyphicon glyphicon-cog"></i>
+                </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" onclick="logout()">Salir</a></li>
+                    <li><a href="#" onclick="logout()">Salir</a>
+                    </li>
                 </ul>
             </li>
         </ul>

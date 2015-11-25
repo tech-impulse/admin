@@ -1,16 +1,17 @@
 
  function cargar_calendario() {
+     getProgramacion();
      $("#div_programacion_plantilla").hide();
      $("#div_programacion_pantalla").hide();
      $("#div_programacion_calendario").show();
      
      $('#calendar').fullCalendar({
          dayClick: function (date, jsEvent, view) {
-             testSwal(date.format());
+             abrir_popup_guardar_programacion(date.format());
              //$(this).css('background-color', 'red');
          },
          eventClick: function (calEvent, jsEvent, view) {
-             testSwal('', calEvent);
+             abrir_popup_guardar_programacion('', calEvent);
          },
          eventMouseover: function (calEvent, jsEvent, view) {
              $("#programacion_informacion_evento").text("Descripción: " + calEvent.descripcion);
@@ -68,13 +69,18 @@
 
  }
 
- function testSwal(data, evento) {
+ function abrir_popup_guardar_programacion(data, evento) {
      var id_evento = '';
+     var boton = 'Publicar!';
      if (evento != undefined) {
-         var id_evento = evento.id;
+         var id_evento = evento.id_externo;
+         nueva_programacion.id_externo = evento.id_externo;
+         boton = 'Modificar!';
+     } else{
+         nueva_programacion.id_externo = '';
      }
      var html =
-         '<a style="margin:10px" id="btn_popup_programacion" onclick="borrar_programacion(' + id_evento + ')" type="button" class="btn btn-danger btn-md">' +
+         '<a style="margin:10px" id="btn_popup_programacion" onclick="deleteProgramacion(' + id_evento + ')" type="button" class="btn btn-danger btn-md">' +
          '<i class="glyphicon glyphicon-trash"></i> Eliminar Programación' +
          '</a>' +
          /*'<div class="alert alert-info" role="alert">Programación del evento</div>' +*/
@@ -158,7 +164,7 @@
          confirmButtonColor: '#3085d6',
          cancelButtonColor: '#d33',
          cancelButtonText: 'Cancelar',
-         confirmButtonText: 'Publicar!',
+         confirmButtonText: boton,
          closeOnConfirm: false,
          allowOutsideClick: false
      }, function () {
@@ -193,23 +199,25 @@
                  nueva_programacion.allDay = false;
              }
              //calendarData.push(nueva_programacion);
-
+             postProgramacion(nueva_programacion.id_externo);
              swal("Guardado!",
                  "Se ha guardado su programación.",
                  "success");
              console.log(JSON.stringify(nueva_programacion));
-             //$('#calendar').fullCalendar( 'removeEvents');
-             calendarData.push(nueva_programacion);
-             $('#calendar').fullCalendar('addEventSource', calendarData);
+             
+             //calendarData.push(nueva_programacion);
+             
              console.log("Plantilla " + titulo + " De " + dinicio + " a " + dfinal + " con horario de " + hinicio + " a " + hfinal);
 
-             //postPlantillas($("#in_popup_guardar").val(), $("#txt_popup_guardar").val(), multimedia_seleccionada);
+             //postPlantilla($("#in_popup_guardar").val(), $("#txt_popup_guardar").val(), multimedia_seleccionada);
          } else {
              console.log("sapdj=");
              $("#sp_popup_programacion").show();
          }
         
      });
+     
+     // CARGAMOS FUNCIONALIDADES DEL POPUP DE GUARDAR PROGRAMACION
      $(function () {
          $('#datetimepicker1').datetimepicker({
              format: 'YYYY-MM-DD'

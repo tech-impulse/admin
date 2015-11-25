@@ -1,16 +1,19 @@
 <div class="row" style="margin-top:10px">
     <div class="col-lg-8">
         <form class="form-inline">
-            <div class="form-group">
-                <button id="video-gallery-button" type="button" class="btn btn-success btn-md">
+
+            <div class="btn-group btn-group-md" role="group">
+                <button id="todo-gallery-button" onclick="getGaleria('galeria_plantilla');" type="button" class="btn btn-info active">
+                    Mostrar todo
+                </button>
+                <button id="video-gallery-button" onclick="getGaleria('galeria_plantilla', 'videos');" type="button" class="btn btn-success">
                     <i class="glyphicon glyphicon-film"></i> Ver Vídeos
                 </button>
-            </div>
-            <div class="form-group">
-                <button id="image-gallery-button" type="button" class="btn btn-primary btn-md">
+                <button id="image-gallery-button" onclick="getGaleria('galeria_plantilla', 'fotos');" type="button" class="btn btn-primary">
                     <i class="glyphicon glyphicon-picture"></i> Ver Imagenes
                 </button>
             </div>
+
             <div class="form-group" style="float:right">
                 <button id="image-gallery-button" type="button" onclick="abrir_popup_guardar_plantilla('plantilla');" class="btn btn-warning btn-md">
                     <i class="glyphicon glyphicon-floppy-disk"></i> Guardar Plantilla
@@ -23,33 +26,50 @@
     </div>
     <div class="col-lg-4">
         <div class="row" style="margin-top:10px">
-            <div class="img1">
-                <img id='img1' width="100%" src="css/img/screen.png" />
-                <img id='img2' width="85%" src="css/img/maqueta.png" />
-
+            <div id="player" class="player-horizontal">
+                <div id='img1' class="img1"> </div>
+                <div>
+                    <img id='img2' class="img2" src="css/img/maqueta.png" />
+                </div>
             </div>
         </div>
-        <div class="row" style="margin:10px; text-align:center; margin-left:7%">
-            <button type="button" class="btn btn-md" onclick="changeDisplay(-2)">
-                <i class="glyphicon glyphicon-fast-backward"></i>
-                <span></span>
-            </button>
-            <button type="button" class="btn btn-md" onclick="changeDisplay(-1)">
-                <i class="glyphicon glyphicon-backward"></i>
-                <span></span>
-            </button>
-            <button type="button" class="btn btn-md" onclick="playDisplay()">
-                <i id="btnPlay" class="glyphicon glyphicon-play"></i>
-                <span></span>
-            </button>
-            <button type="button" class="btn btn-md" onclick="changeDisplay(1)">
-                <i class="glyphicon glyphicon-forward"></i>
-                <span></span>
-            </button>
-            <button type="button" class="btn btn-md" onclick="changeDisplay(2)">
-                <i class="glyphicon glyphicon-fast-forward"></i>
-                <span></span>
-            </button>
+        <div class="row" style="margin:10px;">
+            <div class="col-lg-3 col-md-4">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="ul_orientacion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Horizontal
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="ul_orientacion">
+                        <li><a onclick="cambiar_orientacion(this);">Horizontal</a>
+                        </li>
+                        <li><a onclick="cambiar_orientacion(this);">Vertical</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-8" style="text-align:center">
+                <button type="button" class="btn btn-md" onclick="changeDisplay(-2)">
+                    <i class="glyphicon glyphicon-fast-backward"></i>
+                    <span></span>
+                </button>
+                <button type="button" class="btn btn-md" onclick="changeDisplay(-1)">
+                    <i class="glyphicon glyphicon-backward"></i>
+                    <span></span>
+                </button>
+                <button type="button" class="btn btn-md" onclick="playDisplay()">
+                    <i id="btnPlay" class="glyphicon glyphicon-play"></i>
+                    <span></span>
+                </button>
+                <button type="button" class="btn btn-md" onclick="changeDisplay(1)">
+                    <i class="glyphicon glyphicon-forward"></i>
+                    <span></span>
+                </button>
+                <button type="button" class="btn btn-md" onclick="changeDisplay(2)">
+                    <i class="glyphicon glyphicon-fast-forward"></i>
+                    <span></span>
+                </button>
+            </div>
         </div>
         <hr>
         <div class="">

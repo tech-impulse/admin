@@ -12,7 +12,8 @@ function cargar_pagina(pantalla) {
         $("#content").load("pantallas.html");
         break;
     case 'programacion':
-        getPlantillas('', 'programacion');
+        getProgramacion();
+        getPlantilla('', 'programacion');
         $("#submenu").html('<li class="active">Programacion</li>');
         break;
     case 'galeria':
@@ -20,7 +21,7 @@ function cargar_pagina(pantalla) {
         $("#submenu").html('<li class="active">Galeria</li>');
         break;
     case 'plantillas':
-        getPlantillas('', 'plantillas');
+        getPlantilla('', 'plantillas');
         $("#submenu").html('<li class="active">Plantillas</li>');
         $("#content").load("plantillas.html");
         break;
@@ -38,7 +39,21 @@ function cargar_pagina(pantalla) {
  * @param {Number} columnas Cantidad de columnas multiplo de 12 (2, 3, 4, 6, 12)
  */
 function refrescar_galeria(imagenes, origen, columnas) {
-    // multimedia_disponible = json;
+    if (GALERIA_FOTOS == 1 && GALERIA_VIDEOS == 0) {
+        $("#image-gallery-button").addClass("active");
+        $("#video-gallery-button").removeClass("active");
+        $("#todo-gallery-button").removeClass("active");
+    }
+    if (GALERIA_FOTOS == 0 && GALERIA_VIDEOS == 1) {
+        $("#image-gallery-button").removeClass("active");
+        $("#video-gallery-button").addClass("active");
+        $("#todo-gallery-button").removeClass("active");
+    }
+    if (GALERIA_FOTOS == 1 && GALERIA_VIDEOS == 1) {
+        $("#image-gallery-button").removeClass("active");
+        $("#video-gallery-button").removeClass("active");
+        $("#todo-gallery-button").addClass("active");
+    }
     if (columnas == undefined) {
         columnas = 6;
     }
@@ -48,13 +63,13 @@ function refrescar_galeria(imagenes, origen, columnas) {
     for (var i = 0; i < multimedia_disponible.length; i++) {
         if (cont == 0 && origen != 'plantilla') {
             html = row;
-            html = html + '<div class="col-lg-' + parseInt(12 / columnas) + '">' + '<a href="#" class="thumbnail">' + '<form style="width: 160px; height: 140px" id="form_galeria" method="post" action="" enctype="multipart/form-data">' + '<label for="filesToUpload">' + '<img style="width: 160px; height: 140px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">' + ' </label>' + ' <input onChange="cargar_media();" multiple name="filesToUpload[]" id="filesToUpload" style="display:none" type="file" />' + ' </form>' + '</a>' + '</div>';
+            html = html + '<div class="col-lg-' + parseInt(12 / columnas) + '">' + '<a  class="thumbnail img-galeria">' + '<form style="width: 160px; height: 140px" id="form_galeria" method="post" action="" enctype="multipart/form-data">' + '<label for="filesToUpload">' + '<img style="width: 160px; height: 140px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">' + ' </label>' + ' <input onChange="cargar_media();" multiple name="filesToUpload[]" id="filesToUpload" style="display:none" type="file" />' + ' </form>' + '</a>' + '</div>';
             cont++;
         } else if (cont == columnas) {
             row = '</div>' + row;
             html = html + row;
         }
-        html = html + '<div class="col-lg-' + parseInt(12 / columnas) + '">' + '<div><a href="#" class="thumbnail" id="a_galeria_' + multimedia_disponible[i].id_externo + '" onclick="seleccionar_multimedia(' + multimedia_disponible[i].id_externo + ',\'' + origen + '\')">' +
+        html = html + '<div class="col-lg-' + parseInt(12 / columnas) + '">' + '<div><a class="thumbnail img-galeria" id="a_galeria_' + multimedia_disponible[i].id_externo + '" onclick="seleccionar_multimedia(' + multimedia_disponible[i].id_externo + ',\'' + origen + '\')">' +
             '<img style="width: 160px; height: 150px;" src="' + multimedia_disponible[i].url + '" />';
         if (origen == 'galeria') {
             html = html + '<div class="boton_borrar_galeria">' + '<button onclick="borrar_elemento_galeria(' + multimedia_disponible[i].id_externo + ')" type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>' + '</div>';
@@ -89,7 +104,7 @@ function cargar_plantillas(origen) {
             editabe = '<p><a href="#" class="btn btn-success" role="button" onclick="seleccionar_plantilla(' + array_plantillas[i].id_externo + ',\'' +
                 array_plantillas[i].nombre + '\')">Seleccionar</a></p>';
         } else {
-            editabe = '<p><a href="#" class="btn btn-primary" role="button">Editar</a> <a href="#" onclick="abrir_popup_accion(\'Desea eliminar esta plantilla?\', '+array_plantillas[i].id_externo+')" class="btn btn-default glyphicon glyphicon-trash" role="button"></a></p>';
+            editabe = '<p><a href="#" class="btn btn-primary" role="button" onclick="getPlantilla(' + array_plantillas[i].id_externo + ', \'editar\')">Editar</a> <a href="#" onclick="abrir_popup_accion(\'Desea eliminar esta plantilla?\', ' + array_plantillas[i].id_externo + ')" class="btn btn-default glyphicon glyphicon-trash" role="button"></a></p>';
         }
 
         if (cont == 6 || cont == 0) {
@@ -99,7 +114,7 @@ function cargar_plantillas(origen) {
         }
         html = html + '<div class="col-sm-6 col-md-4 col-lg-2" ' + funcionalidad + '>' +
             '<div class="thumbnail">' +
-            '<img class="img_plantilla" src="http://testhtml5.esadecreapolis.com/ws/show_image.php?token=' + token + "&id="+ array_plantillas[i].elementos[0].id_externo + '" alt="...">' +
+            '<img class="img_plantilla" src="http://testhtml5.esadecreapolis.com/ws/show_image.php?token=' + token + "&id=" + array_plantillas[i].elementos[0].id_externo + '" alt="...">' +
             '<div class="caption">' +
             '<h3>' + array_plantillas[i].nombre + '</h3>' +
             '<p>' + array_plantillas[i].descripcion + '</p>' +
@@ -285,7 +300,9 @@ function cargar_media() {
     FR.readAsDataURL(files[0]);
 }
 
-function borrar_elemento_galeria(id) {}
+function borrar_elemento_galeria(id) {
+    abrir_popup_accion('deleteGaleria', id);
+}
 
 function abrir_popup_informacion(dato) {
     swal({
@@ -323,34 +340,46 @@ function abrir_popup_accion(dato, id) {
         confirmButtonText: 'Si!',
         closeOnConfirm: true
     }, function () {
+        if (dato == 'deleteGaleria') {
+            deleteGaleria(id);
+        } else {
             deletePlantilla(id);
-        });
+        }
+    });
 }
 
 /**
  * FUNCION QUE MUESTRA EL POPUP DE GUARDAR PLANTILLA
  */
 function abrir_popup_guardar_plantilla() {
+    var nombre = '';
+    var descripcion = '';
+    if (nueva_plantilla.nombre != undefined) {
+        nombre = nueva_plantilla.nombre;
+        descripcion = nueva_plantilla.descripcion;
+    }
     var check = true;
     var mensaje;
-    for (var i = 0; i < multimedia_seleccionada.length; i++) {
-        if (multimedia_seleccionada[i].duracion == "") {
-            check = false;
-            mensaje = 'Rellene la duración de las imagenes!';
-        }
-    }
-    if (multimedia_seleccionada.length == 0) {
+
+    if (nueva_plantilla.media==undefined || nueva_plantilla.media.length == 0) {
         check = false;
         mensaje = 'La plantilla está vacía!';
+    } else {
+        for (var i = 0; i < nueva_plantilla.media.length; i++) {
+            if (nueva_plantilla.media[i].duracion == "") {
+                check = false;
+                mensaje = 'Rellene la duración de las imagenes!';
+            }
+        }
     }
 
     var html = '<div class="input-group" style="margin:5px">' +
         '<span class="input-group-addon" style="padding-right:35px" id="basic-addon1">Nombre  </span>' +
-        '<input type="text" id="in_popup_guardar" class="form-control" placeholder="" aria-describedby="basic-addon1">' +
+        '<input type="text" id="in_popup_guardar" class="form-control" placeholder="' + nombre + '" aria-describedby="basic-addon1">' +
         '</div>' +
         '<div class="input-group" style="margin:5px">' +
         '<span class="input-group-addon" id="basic-addon1">Descripción</span>' +
-        '<textarea id="txt_popup_guardar" type="text" class="form-control" placeholder="" aria-describedby="basic-addon1"></textarea>' +
+        '<textarea id="txt_popup_guardar" type="text" class="form-control" placeholder="' + descripcion + '" aria-describedby="basic-addon1"></textarea>' +
         '</div>';
     if (check) {
         swal({
@@ -360,11 +389,15 @@ function abrir_popup_guardar_plantilla() {
             cancelButtonText: 'Cancelar',
             showCancelButton: true,
             html: html,
-            closeOnConfirm: true,
+            closeOnConfirm: false,
         }, function () {
             if ($("#in_popup_guardar").val() != "" && $("#txt_popup_guardar").val() != "") {
-                postPlantillas($("#in_popup_guardar").val(), $("#txt_popup_guardar").val(), multimedia_seleccionada);
+                nueva_plantilla.nombre = $("#in_popup_guardar").val();
+                nueva_plantilla.descripcion = $("#txt_popup_guardar").val();
+                nueva_plantilla.media = nueva_plantilla.media;
+                postPlantilla();
             } else {
+                console.log("No esta");
                 html = html + "Rellene todos los campos";
             }
         });

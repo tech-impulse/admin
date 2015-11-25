@@ -1,15 +1,14 @@
-<form class="form-inline">
-    <div class="form-group">
-        <button id="video-gallery-button" type="button" class="btn btn-success btn-lg">
-            <i class="glyphicon glyphicon-film"></i> Ver Vídeos
-        </button>
-    </div>
-    <div class="form-group">
-        <button id="image-gallery-button" type="button" class="btn btn-primary btn-lg">
-            <i class="glyphicon glyphicon-picture"></i> Ver Imagenes
-        </button>
-    </div>
-</form>
+<div class="btn-group btn-group-md" role="group">
+        <button id="todo-gallery-button" onclick="getGaleria('galeria');" type="button" class="btn btn-info active">
+        Mostrar todo
+    </button>
+    <button id="video-gallery-button" onclick="getGaleria('galeria', 'videos');" type="button" class="btn btn-success">
+        <i class="glyphicon glyphicon-film"></i> Ver Vídeos
+    </button>
+    <button id="image-gallery-button" onclick="getGaleria('galeria', 'fotos');" type="button" class="btn btn-primary">
+        <i class="glyphicon glyphicon-picture"></i> Ver Imagenes
+    </button>
+</div>
 <hr>
 <div id="div_galeria">
 

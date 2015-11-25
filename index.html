@@ -32,8 +32,7 @@
 </head>
 
 <body id="page">
-    
-    <div class="container" style="padding-top:10%">
+    <div class="container" style="padding-top:10%; display:none" id="page_login">
         <div class="row">
             <div class="col-sm-8 col-md-4 col-md-offset-4">
                 <div class="account-wall">
@@ -64,13 +63,14 @@
     if (localStorage["youtter_admin_token"] != undefined) {
         token = localStorage["youtter_admin_token"];
         $("#page").load("menu.html");
+    }else{
+        $("#page_login").show();
     }
     if (localStorage["youtter_admin_password"] != undefined) {
         $("#emailLogin").val(localStorage["youtter_admin_username"]);
         $("#passwordLogin").val(localStorage["youtter_admin_password"]);
         $('#check_login_remember').prop('checked', true);
     }
-
 
     function login() {
         var pass = CryptoJS.MD5($("#passwordLogin").val()).toString();
@@ -82,7 +82,7 @@
         $.ajax({
             data: datos,
             url: url + 'login/',
-            type: 'GET',
+            type: 'POST',
             dataType: 'json',
             success: function (response) {
                 if ($('#check_login_remember').is(":checked")) {

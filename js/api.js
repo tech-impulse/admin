@@ -3,11 +3,25 @@
  * @param {int} tipo Imagenes:0 ; Video:1
  */
 
-function getGaleria(tipo) {
+function getGaleria(tipo, formato) {
+    $("#image-gallery-button").removeClass("active");
+    $("#video-gallery-button").removeClass("active");
+    $("#todo-gallery-button").addClass("active");
+    $("#submenu").html('<li><a href="#" onclick="getGaleria(\'' + tipo + '\');">Galería</a></li>');
+    GALERIA_FOTOS = 1;
+    GALERIA_VIDEOS = 1;
+    if (formato == 'fotos') {
+        GALERIA_VIDEOS = 0;
+    }
+    if (formato == 'videos') {
+        GALERIA_FOTOS = 0;
+    }
     var datos = {
         token: token,
+        fotos: GALERIA_FOTOS,
+        videos: GALERIA_VIDEOS
     };
-
+    console.log(datos);
     peticion_actual = $.ajax({
         data: datos,
         url: url + 'galeria/',
@@ -41,13 +55,32 @@ function postGaleria(arrayImagenes) {
     });
 }
 
+function deleteGaleria(id) {
+    var datos = {
+        token: token,
+        id_externo: id,
+    };
+    peticion_actual = $.ajax({
+        url: url + 'galeria/' + '?token=' + token + '&id_externo=' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        success: function (response) {
+            rest_ok(response, "delete_galeria");
+        },
+        error: function (response) {
+            rest_error(response, "delete_galeria");
+        },
+    })
+}
+
 /**
  * FUNCION QUE RETORNA LA LISTA DE PLANTILLAS
  * @param {int} id Id de la plantilla, si no está definido devuelve todas
  */
-function getPlantillas(id, tipo) {
+function getPlantilla(id, tipo) {
     var datos = {
         token: token,
+        id_externo: id
     };
 
     peticion_actual = $.ajax({
@@ -56,7 +89,11 @@ function getPlantillas(id, tipo) {
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            rest_ok(response, tipo);
+            if (tipo == 'editar') {
+                rest_ok(response, 'editar_plantilla');
+            } else {
+                rest_ok(response, tipo);
+            }
         },
         error: function (response) {
             rest_error(response, tipo);
@@ -64,16 +101,16 @@ function getPlantillas(id, tipo) {
     });
 }
 
-function postPlantillas(nombre, descripcion, arrayImagenes) {
-
-    for (var i = 0; i < arrayImagenes.length; i++) {
-        arrayImagenes[i].orden = i;
+function postPlantilla() {
+    for (var i = 0; i < nueva_plantilla.media.length; i++) {
+        nueva_plantilla.media[i].orden = i;
+    }
+    if (nueva_plantilla.id_externo == undefined) {
+        nueva_plantilla.id_externo = '';
     }
     var datos = {
         token: token,
-        nombre: nombre,
-        descripcion: descripcion,
-        media: arrayImagenes
+        datos: nueva_plantilla
     };
     test = datos;
 
@@ -99,7 +136,7 @@ function deletePlantilla(id) {
         id_externo: id,
     };
     peticion_actual = $.ajax({
-        url: url + 'plantilla/'+ '?token=' + token + '&id_externo='+id,
+        url: url + 'plantilla/' + '?token=' + token + '&id_externo=' + id,
         type: 'DELETE',
         dataType: 'json',
         success: function (response) {
@@ -107,6 +144,81 @@ function deletePlantilla(id) {
         },
         error: function (response) {
             rest_error(response, "delete_plantilla");
+        },
+    })
+}
+
+function getProgramacion(id) {
+    var datos = {
+        token: token,
+        id: id
+    };
+
+    peticion_actual = $.ajax({
+        data: datos,
+        url: url + 'programacion/',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            if (response.error != "Programacion inexistente. ") {
+                calendarData = response;
+                $('#calendar').fullCalendar('removeEvents');
+                $('#calendar').fullCalendar('addEventSource', calendarData);
+            }
+
+            rest_ok(response, 'get_programacion');
+        },
+        error: function (response) {
+            rest_error(response, 'get_programacion');
+        },
+    });
+}
+
+function postProgramacion(id) {
+
+    var datos = {
+        token: token,
+        datos: nueva_programacion,
+        id_externo: id
+    };
+    test = datos;
+
+    console.log(datos);
+
+    peticion_actual = $.ajax({
+        data: datos,
+        url: url + 'programacion/',
+        type: 'POST',
+        dataType: 'json',
+        success: function (response) {
+            rest_ok(response, 'post_programacion');
+            getProgramacion();
+
+        },
+        error: function (response) {
+            rest_error(response, "post_programacion");
+        },
+    })
+}
+
+function deleteProgramacion(id) {
+    var datos = {
+        token: token,
+        id_externo: id,
+    };
+    peticion_actual = $.ajax({
+        url: url + 'programacion/' + '?token=' + token + '&id_externo=' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        success: function (response) {
+            rest_ok(response, "delete_programacion");
+            getProgramacion();
+            var alert = document.querySelector(".sweet-alert"),
+                okButton = alert.getElementsByTagName("button")[1];
+            $(okButton).trigger("click");
+        },
+        error: function (response) {
+            rest_error(response, "delete_programacion");
         },
     })
 }
@@ -120,11 +232,11 @@ function getPaises(origen) {
         url: url + 'paises/',
         dataType: 'json',
         success: function (response) {
-            if(origen == 'programacion'){
-               rest_ok(response, "programacion_paises"); 
-            } else{
-               rest_ok(response, "pantallas_paises"); 
-            }             
+            if (origen == 'programacion') {
+                rest_ok(response, "programacion_paises");
+            } else {
+                rest_ok(response, "pantallas_paises");
+            }
         },
         error: function (response) {
             rest_error(response, "pantallas_paises");
@@ -173,7 +285,7 @@ function rest_ok(respuesta, tipo) {
             {
                 console.log("Login ok");
                 $("#page").load("menu.html", function () {
-                    getPaises(); 
+                    getPaises();
                     $("#submenu").html('<li class="active">Pantallas</li>');
                     $("#content").load("pantallas.html");
                 });
@@ -183,25 +295,43 @@ function rest_ok(respuesta, tipo) {
         case "galeria":
             {
                 multimedia_disponible = respuesta.galeria;
-                for (var i = 0; i < multimedia_disponible.length; i++) {
-                    multimedia_disponible[i].url = url + 'show_image.php?token=' + token + '&id=' + multimedia_disponible[i].id_externo;
+                if (multimedia_disponible != null) {
+                    for (var i = 0; i < multimedia_disponible.length; i++) {
+                        multimedia_disponible[i].url = url + 'show_image.php?token=' + token + '&id=' + multimedia_disponible[i].id_externo;
+                    }
+                    $("#content").load("galeria.html", function () {
+                        refrescar_galeria(multimedia_disponible, 'galeria', 6);
+                    });
+                } else {
+                    abrir_popup_informacion('No hay multimedia disponible');
                 }
-                $("#content").load("galeria.html", function () {
-                    refrescar_galeria(multimedia_disponible, 'galeria', 6);
-                });
+                break;
+            };
+        case "delete_galeria":
+            {
+                if (respuesta.warning == undefined) {
+                    getGaleria('galeria');
+                } else {
+                    console.log("Ya existe");
+                }
 
                 break;
             };
         case "galeria_plantilla":
             {
-                multimedia_seleccionada = [];
                 multimedia_disponible = respuesta.galeria;
-                for (var i = 0; i < multimedia_disponible.length; i++) {
-                    multimedia_disponible[i].url = url + 'show_image.php?token=' + token + '&id=' + multimedia_disponible[i].id_externo;
+                if (multimedia_disponible != null) {
+                    for (var i = 0; i < multimedia_disponible.length; i++) {
+                        multimedia_disponible[i].url = url + 'show_image.php?token=' + token + '&id=' + multimedia_disponible[i].id_externo;
+                    }
+                    $("#content").load("plantilla.html", function () {
+                        refrescar_galeria(multimedia_disponible, 'plantilla', 6);
+                        refrescar_player();
+
+                    });
+                } else {
+                    abrir_popup_informacion('No hay multimedia disponible');
                 }
-                $("#content").load("plantilla.html", function () {
-                    refrescar_galeria(multimedia_disponible, 'plantilla', 6);
-                });
 
                 break;
             };
@@ -212,8 +342,22 @@ function rest_ok(respuesta, tipo) {
             };
         case "plantillas":
             {
+                nueva_plantilla.media = [];
                 array_plantillas = respuesta.resultado;
                 cargar_plantillas('plantillas');
+                break;
+            };
+        case "editar_plantilla":
+            {
+                nueva_plantilla = {};
+                nueva_plantilla.id_externo = respuesta.resultado[0].id_externo;
+                nueva_plantilla.nombre = respuesta.resultado[0].nombre;
+                nueva_plantilla.descripcion = respuesta.resultado[0].descripcion;
+                nueva_plantilla.media = respuesta.resultado[0].elementos;
+                for (var i = 0; i < nueva_plantilla.media.length; i++) {
+                    nueva_plantilla.media[i].url = url + 'show_image.php?token=' + token + '&id=' + nueva_plantilla.media[i].id_externo;
+                }
+                cargar_pagina('plantilla');
                 break;
             };
         case "programacion":
@@ -225,6 +369,7 @@ function rest_ok(respuesta, tipo) {
 
                 break;
             };
+
         case "programacion_paises":
             {
                 $("#div_programacion_plantilla").hide();
@@ -237,20 +382,23 @@ function rest_ok(respuesta, tipo) {
             };
         case "post_plantilla":
             {
+                swal("Guardado!",
+                    "Se ha creado la nueva plantilla.",
+                    "success");
                 console.log("plantilla guardada");
                 break;
             };
         case "delete_plantilla":
             {
-                getPlantillas('', 'plantillas');
+                getPlantilla('', 'plantillas');
                 console.log("plantilla borrada");
                 break;
             };
         case "pantallas":
             {
-                    array_pantallas = respuesta.resultado;
-                    array_pantallas.seleccionadas = 0;
-                    cargar_pantallas(array_pantallas, 'pantallas', 'pantallas');
+                array_pantallas = respuesta.resultado;
+                array_pantallas.seleccionadas = 0;
+                cargar_pantallas(array_pantallas, 'pantallas', 'pantallas');
                 break;
             };
         case "pantallas_paises":

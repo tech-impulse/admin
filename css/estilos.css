@@ -9,6 +9,7 @@
         top: 0;
         text-align: right;
         padding-right: 35px;
+        z-index: 1;
     }
     
     .thumb-big {
@@ -29,22 +30,49 @@
         border: 1px solid #000;
         margin: 5px 5px 0 0;
     }
-
+    
     .img_plantilla {
         height: 150px!important;
     }
+
+    .img-galeria{
+        cursor: pointer;
+    }
     
-    .img1 {
+    .player-horizontal {
         margin-left: 30px;
         position: relative;
     }
-    
-    #img2 {
+
+    .player-vertical {
+        margin-left: 30px;
+        position: relative;
+        padding-left: 25%;
+        padding-right: 25%
+    }
+
+    .img1 {
+        background-image: url("img/screenHorizontal.png");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        width:100%; 
+        height:40vh;
+    }    
+
+    .img2 {
         position: absolute;
         left: 2%;
         width: 96%;
-        height: 92%;
         top: 2%;
+        height: 37vh
+    }
+
+    .img2-vertical {
+        position: absolute;
+        left: 28%;
+        width: 44%;
+        top: 24%;
+        height: 20vh;
     }
     
     .boton_check_galeria {
@@ -54,7 +82,7 @@
         top: 0;
         text-align: left;
     }
-    /* ESTILOS DEL CALENDARIO */
+    /* ESTILOS DEL CALENDARIO 
     
     #calendar {
         margin: 0;
@@ -86,4 +114,15 @@
         max-width: 900px;
         margin: auto;
         padding: 0 10px;
+    }
+    
+    .popupCargando {
+        background-color: rgb(0, 0, 0);
+        opacity: 0.8;
+        max-width: none;
+        height: 100%;
+        width: 100%; 
+        display:none; 
+        position:fixed;
+        z-index: 1;
     }

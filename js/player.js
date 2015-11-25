@@ -13,29 +13,29 @@ function seleccionar_multimedia(id, origen) {
 }
 
 function anadir_multimedia(media) {
-
-    setTimeout(function () {
-        $('#div_check_' + parseInt(media.id_externo)).html('<img src="css/img/check-icon.png">');
-    }, 10);
-    multimedia_seleccionada.push(media);
+    if (nueva_plantilla.media == undefined) {
+        nueva_plantilla.media = [];
+        nueva_plantilla.media.push(media);
+    } else {
+        nueva_plantilla.media.push(media);
+    }
     refrescar_player();
 }
 
 function eliminar_multimedia(id) {
-    setTimeout(function () {
-        $('#div_check_' + id).html('');
-    }, 100);
-    for (var i = 0; i < multimedia_seleccionada.length; i++) {
-        if (multimedia_seleccionada[i].id_externo == id) {
-            multimedia_seleccionada = removeElement(multimedia_seleccionada, i);
+    for (var i = 0; i < nueva_plantilla.media.length; i++) {
+        if (nueva_plantilla.media[i].id_externo == id) {
+            nueva_plantilla.media = removeElement(nueva_plantilla.media, i);
         }
     }
-
+    setTimeout(function () {
+        $('#div_check_' + id).html('');
+    }, 10);
     refrescar_player();
 }
 
 function refrescar_player() {
-    //$("#display").html('');
+
     var html = '<li class="list-group-item">' +
         '<div class="row">' +
         '<div class="col-lg-3">Imagen</div>' +
@@ -44,16 +44,30 @@ function refrescar_player() {
         '<div class="col-lg-3">Acción</div>' +
         '</div>' +
         '</li>';
-    for (var i = 0; i < multimedia_seleccionada.length; i++) {
-        if (multimedia_seleccionada[i] != undefined) {
-            var duracion = parseInt(multimedia_seleccionada[i].duracion);
-            var img = '<img class="thumb" src="' + multimedia_seleccionada[i].url + '"/>';
-            html = html + '<li class="list-group-item" id="line' + i + '"><div class="row"><div class="col-lg-3">' + img + '</div>' +
-                '<div class="col-lg-4"><center>' +
-                '<input onchange="multimedia_seleccionada[' + i + '].duracion=this.value" value="' + duracion + '" type="number" style="font-size:20px; margin:20px; width:80px; text-align:center; border-radius:5px" min="0" max="999"></center></div>' +
-                '<div class="col-lg-2"><button class="btn btn-sm glyphicon glyphicon-arrow-up" style="margin:1px" onclick="mover_elemento(' + i + ', -1)"></button>' +
-                '<button class="btn btn-sm glyphicon glyphicon-arrow-down" onclick="mover_elemento(' + i + ', 1)"></button></div>' +
-                '<div class="col-lg-3"><h4><button class="btn btn-lg btn-danger" onclick="eliminar_multimedia(' + multimedia_seleccionada[i].id_externo + ')"> <i class="glyphicon glyphicon-trash"></i><span></span></button></h4></div></li>';
+    if (nueva_plantilla.media != undefined) {
+        for (var i = 0; i < nueva_plantilla.media.length; i++) {
+            if (nueva_plantilla.media[i] != undefined) {
+                var duracion = parseInt(nueva_plantilla.media[i].duracion);
+                var img = '<img class="thumb" src="http://testhtml5.esadecreapolis.com/ws/show_image.php?token=' + token + "&id=" + nueva_plantilla.media[i].id_externo + '"/>';
+                html = html + '<li class="list-group-item" id="line' + i + '"><div class="row"><div class="col-lg-3">' + img + '</div>' +
+                    '<div class="col-lg-4"><center>' +
+                    '<input onchange="nueva_plantilla.media[' + i + '].duracion=this.value" value="' + duracion + '" type="number" style="font-size:20px; margin:20px; width:80px; text-align:center; border-radius:5px" min="0" max="999"></center></div>' +
+                    '<div class="col-lg-2"><button class="btn btn-sm glyphicon glyphicon-arrow-up" style="margin:1px" onclick="mover_elemento(' + i + ', -1)"></button>' +
+                    '<button class="btn btn-sm glyphicon glyphicon-arrow-down" onclick="mover_elemento(' + i + ', 1)"></button></div>' +
+                    '<div class="col-lg-3"><h4><button class="btn btn-lg btn-danger" onclick="eliminar_multimedia(' + nueva_plantilla.media[i].id_externo + ')"> <i class="glyphicon glyphicon-trash"></i><span></span></button></h4></div></li>';
+            }
+        }
+
+        for (var i = 0; i < multimedia_disponible.length; i++) {
+            for (var j = 0; j < nueva_plantilla.media.length; j++) {
+                if (multimedia_disponible[i].id_externo == nueva_plantilla.media[j].id_externo) {
+                    console.log("Pon tick al " + multimedia_disponible[i].id_externo);
+                    $('#div_check_' + parseInt(multimedia_disponible[i].id_externo)).html('<img src="css/img/check-icon.png">');
+                    setTimeout(function () {
+
+                    }, 10);
+                }
+            }
         }
     }
 
@@ -63,9 +77,9 @@ function refrescar_player() {
 function mover_elemento(desde, tipo) {
     if (desde == 0 && tipo == -1) {} else {
         var hasta = desde + tipo;
-        var elemento = multimedia_seleccionada[desde];
-        multimedia_seleccionada.splice(desde, 1);
-        multimedia_seleccionada.splice(hasta, 0, elemento);
+        var elemento = nueva_plantilla.media[desde];
+        nueva_plantilla.media.splice(desde, 1);
+        nueva_plantilla.media.splice(hasta, 0, elemento);
         refrescar_player();
     }
 }
@@ -75,13 +89,13 @@ var secuencePosition = 0;
 
 
 function playDisplay() {
-    if (multimedia_seleccionada.length != undefined) {
-        if ($("#btnPlay").hasClass("glyphicon-play") && multimedia_seleccionada.length > 0) {
+    if (nueva_plantilla.media.length != undefined) {
+        if ($("#btnPlay").hasClass("glyphicon-play") && nueva_plantilla.media.length > 0) {
             $("#btnPlay").toggleClass('glyphicon-play glyphicon-pause');
-            document.getElementById("img2").src = multimedia_seleccionada[secuencePosition].url;
+            document.getElementById("img2").src = nueva_plantilla.media[secuencePosition].url;
             playSecuence = setInterval(function () {
-                document.getElementById("img2").src = multimedia_seleccionada[secuencePosition].url;
-                if ((secuencePosition) == (multimedia_seleccionada.length - 1)) {
+                document.getElementById("img2").src = nueva_plantilla.media[secuencePosition].url;
+                if ((secuencePosition) == (nueva_plantilla.media.length - 1)) {
                     secuencePosition = 0;
                 } else {
                     secuencePosition++;
@@ -92,8 +106,8 @@ function playDisplay() {
             $("#btnPlay").addClass('glyphicon-play');
             clearInterval(playSecuence);
         }
-    } else{
-        $("#img2").attr("src","css/img/maqueta.png");
+    } else {
+        $("#img2").attr("src", "css/img/maqueta.png");
     }
 
 }
@@ -102,22 +116,22 @@ function changeDisplay(type) {
     if (type == -2) {
         secuencePosition = 0;
     } else if (type == 2) {
-        secuencePosition = (multimedia_seleccionada.length - 1);
+        secuencePosition = (nueva_plantilla.media.length - 1);
     } else {
         secuencePosition = secuencePosition + type;
-        if ((secuencePosition) == (multimedia_seleccionada.length)) {
+        if ((secuencePosition) == (nueva_plantilla.media.length)) {
             secuencePosition = 0;
         }
         if (secuencePosition < 0) {
-            secuencePosition = (multimedia_seleccionada.length - 1);
+            secuencePosition = (nueva_plantilla.media.length - 1);
         }
     }
 
-    if ($("#btnPlay").hasClass("glyphicon-play") && multimedia_seleccionada.length > 0) {
-        document.getElementById("img2").src = multimedia_seleccionada[secuencePosition].url;
+    if ($("#btnPlay").hasClass("glyphicon-play") && nueva_plantilla.media.length > 0) {
+        document.getElementById("img2").src = nueva_plantilla.media[secuencePosition].url;
 
     } else {
-        document.getElementById("img2").src = multimedia_seleccionada[secuencePosition].url;
+        document.getElementById("img2").src = nueva_plantilla.media[secuencePosition].url;
         $("#btnPlay").removeClass('glyphicon-pause');
         $("#btnPlay").addClass('glyphicon-play');
         clearInterval(playSecuence);
@@ -133,4 +147,22 @@ function removeElement(arr, index) {
         }
     }
     return newArr;
+}
+
+function cambiar_orientacion(element) {
+    console.log("cambiar");
+    $("#ul_orientacion").text(element.text);
+    if (element.text == 'Vertical') {
+        console.log("vert");
+        $("#player").removeClass("player-horizontal");
+        $("#player").addClass("player-vertical");
+        $("#img2").removeClass("img2");
+        $("#img2").addClass("img2-vertical");
+    } else {
+        console.log("or");
+        $("#player").removeClass("player-vertical");
+        $("#player").addClass("player-horizontal");
+        $("#img2").removeClass("img2-vertical");
+        $("#img2").addClass("img2");
+    }
 }
