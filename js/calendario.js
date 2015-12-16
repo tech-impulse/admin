@@ -1,17 +1,16 @@
 
- function cargar_calendario() {
-     getProgramacion();
-     $("#div_programacion_plantilla").hide();
-     $("#div_programacion_pantalla").hide();
-     $("#div_programacion_calendario").show();
-     
+ function cargar_calendario(tipo) {     
      $('#calendar').fullCalendar({
          dayClick: function (date, jsEvent, view) {
-             abrir_popup_guardar_programacion(date.format());
+             if(tipo == 'editar'){
+               abrir_popup_guardar_programacion(date.format());  
+             }             
              //$(this).css('background-color', 'red');
          },
          eventClick: function (calEvent, jsEvent, view) {
+             if(tipo == 'editar'){
              abrir_popup_guardar_programacion('', calEvent);
+             }
          },
          eventMouseover: function (calEvent, jsEvent, view) {
              $("#programacion_informacion_evento").text("Descripción: " + calEvent.descripcion);
@@ -80,9 +79,6 @@
          nueva_programacion.id_externo = '';
      }
      var html =
-         '<a style="margin:10px" id="btn_popup_programacion" onclick="deleteProgramacion(' + id_evento + ')" type="button" class="btn btn-danger btn-md">' +
-         '<i class="glyphicon glyphicon-trash"></i> Eliminar Programación' +
-         '</a>' +
          /*'<div class="alert alert-info" role="alert">Programación del evento</div>' +*/
          '<div class="panel panel-success">' +
          '<div class="panel-heading">' +
@@ -152,12 +148,17 @@
          '<label style="float:left; margin:5px">Nombre:</label><br>'+
          '<label style="float:left; margin:5px">Descripción:</label>'+
          '</div>' +
-         '<div class="col-lg-8">'+
+         '<div class="col-lg-7">'+
          '<input style="float:left; margin:5px" type="text" id="in_popup_programacion" placeholder="Nombre del evento"/><br>' +
          '<textarea style="float:left; margin:5px" type="text" id="txt_popup_programacion" placeholder="Descripción del evento"></textarea>' +     
          '</div>' +
+         '<div class="col-lg-1">'+
+         '<a style="float:right" id="btn_popup_programacion" onclick="deleteProgramacion(' + id_evento + ')" type="button" class="btn btn-danger btn-md">' +
+         '<i class="glyphicon glyphicon-trash"></i>' +
+         '</a>' +    
+         '</div>' +         
          '</div>' +
-         '<br><label style="display:none; color:red; margin-top:10px" id="sp_popup_programacion">Compruebe los datos!</label>';
+         '<label style="display:none; color:red; margin-top:10px" id="sp_popup_programacion">Compruebe los datos!</label>';
      swal({
          html: html,
          showCancelButton: true,

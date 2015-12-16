@@ -11,10 +11,18 @@ function cargar_pagina(pantalla) {
         $("#submenu").html('<li class="active">Pantallas</li>');
         $("#content").load("pantallas.html");
         break;
+    case 'ver_programacion':
+        $("#content").load("ver_programacion.html", function () {
+            calendarData = {};
+            getPaises('ver_programacion');
+            cargar_calendario('ver');
+        });
+        $("#submenu").html('<li class="active">Programaciones</li>');
+        break;
     case 'programacion':
         getProgramacion();
         getPlantilla('', 'programacion');
-        $("#submenu").html('<li class="active">Programacion</li>');
+        $("#submenu").html('<li class="active">Nueva programacion</li>');
         break;
     case 'galeria':
         getGaleria('galeria');
@@ -63,14 +71,16 @@ function refrescar_galeria(imagenes, origen, columnas) {
     for (var i = 0; i < multimedia_disponible.length; i++) {
         if (cont == 0 && origen != 'plantilla') {
             html = row;
-            html = html + '<div class="col-lg-' + parseInt(12 / columnas) + '">' + '<a  class="thumbnail img-galeria">' + '<form style="width: 160px; height: 140px" id="form_galeria" method="post" action="" enctype="multipart/form-data">' + '<label for="filesToUpload">' + '<img style="width: 160px; height: 140px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">' + ' </label>' + ' <input onChange="cargar_media();" multiple name="filesToUpload[]" id="filesToUpload" style="display:none" type="file" />' + ' </form>' + '</a>' + '</div>';
+            html = html + '<div class="col-lg-2 col-md-3 col-sm-4">' + '<a  class="thumbnail img-galeria">' + '<form style="width: 160px; height: 140px" id="form_galeria" method="post" action="" enctype="multipart/form-data">' + '<label for="filesToUpload">' + '<img style="width: 160px; height: 140px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">' + ' </label>' + ' <input onChange="cargar_media();" multiple name="filesToUpload[]" id="filesToUpload" style="display:none" type="file" />' + ' </form>' + '</a>' + '</div>';
             cont++;
-        } else if (cont == columnas) {
+        } else if (cont == 6) {
             row = '</div>' + row;
             html = html + row;
         }
-        html = html + '<div class="col-lg-' + parseInt(12 / columnas) + '">' + '<div><a class="thumbnail img-galeria" id="a_galeria_' + multimedia_disponible[i].id_externo + '" onclick="seleccionar_multimedia(' + multimedia_disponible[i].id_externo + ',\'' + origen + '\')">' +
-            '<img style="width: 160px; height: 150px;" src="' + multimedia_disponible[i].url + '" />';
+        setOrientacion(multimedia_disponible[i].url, 'img_galeria_' + multimedia_disponible[i].id_externo);
+        
+        html = html + '<div class="col-lg-2 col-md-3 col-sm-4">' + '<div><a class="thumbnail img-galeria" id="a_galeria_' + multimedia_disponible[i].id_externo + '" onclick="seleccionar_multimedia(' + multimedia_disponible[i].id_externo + ',\'' + origen + '\')">' +
+            '<img id="img_galeria_' + multimedia_disponible[i].id_externo + '" src="' + multimedia_disponible[i].url + '" />';
         if (origen == 'galeria') {
             html = html + '<div class="boton_borrar_galeria">' + '<button onclick="borrar_elemento_galeria(' + multimedia_disponible[i].id_externo + ')" type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>' + '</div>';
         }
@@ -217,6 +227,29 @@ function cargar_pantallas(datos, origen, tipo) {
                     ')</a>';
             }
         }
+
+        html = html + '</div>';
+        $("#div_programacion_pantallas_lista").html(html);
+        break;
+    case 'ver_programacion':
+        if (datos == null) {
+            for (var i = 0; i < array_pantallas.length; i++) {
+                array_pantallas[i].seleccionada = false;
+            }
+            array_pantallas.seleccionadas = 0;
+        }
+        datos = array_pantallas;
+        var html = '<div class="list-group">';
+        for (var i = 0; i < datos.length; i++) {
+            if (datos[i].seleccionada) {
+                html = html + '<a href="#" class="list-group-item active" onclick="seleccionar_pantalla_programacion(' + i + ', this)"><strong>' +
+                    datos[i].nombre + '</a>';
+            } else {
+                html = html + '<a href="#" class="list-group-item" onclick="seleccionar_pantalla_programacion(' + i + ', this)"><strong>' +
+                    datos[i].nombre + '</a>';
+            }
+        }
+
         html = html + '</div>';
         $("#div_programacion_pantallas_lista").html(html);
         break;
@@ -273,6 +306,32 @@ function seleccionar_pantalla(pos, elemento) {
         $("#btn_pantallas_continuar").show();
     } else {
         $("#btn_pantallas_continuar").hide();
+    }
+}
+
+/**
+ * FUNCION QUE SELECCIONA UNA PANTALLA
+ * @param {Number} pos      [Posición del elemento seleccionado]
+ * @param {Object} elemento [Elemento HTML seleccionado]
+ */
+function seleccionar_pantalla_programacion(pos, elemento) {
+
+    if (array_pantallas[pos].seleccionada == undefined || array_pantallas[pos].seleccionada == false) {
+        $(elemento).addClass('active');
+        array_pantallas[pos].seleccionada = true;
+        array_pantallas.seleccionadas = array_pantallas.seleccionadas + 1;
+    } else {
+        $(elemento).removeClass('active');
+        array_pantallas[pos].seleccionada = false;
+        array_pantallas.seleccionadas = array_pantallas.seleccionadas - 1;
+    }
+
+    if (array_pantallas.seleccionadas > 0) {
+        getProgramacion(array_pantallas[pos].id_externo);
+    } else {
+        calendarData = {};
+        $('#calendar').fullCalendar('removeEvents');
+        $('#calendar').fullCalendar('addEventSource', calendarData);
     }
 }
 
@@ -361,7 +420,7 @@ function abrir_popup_guardar_plantilla() {
     var check = true;
     var mensaje;
 
-    if (nueva_plantilla.media==undefined || nueva_plantilla.media.length == 0) {
+    if (nueva_plantilla.media == undefined || nueva_plantilla.media.length == 0) {
         check = false;
         mensaje = 'La plantilla está vacía!';
     } else {
@@ -425,14 +484,17 @@ function filtra_datos(palabra, datos, filtro) {
     return datos_filtrados;
 }
 
-$('#filtrar_pantallas').on('keyup', function () {
-    var palabra = this.value;
-    var datos;
-    if (this.value.length > 1) {
-        datos = filtra_datos(palabra, array_pantallas, 'codigo_postal');
-        cargar_pantallas(datos, 'pantallas', 'pantallas');
-    } else {
-        datos = array_pantallas;
-        cargar_pantallas(datos, 'pantallas', 'pantallas');
-    }
-});
+function setOrientacion(url, id){   
+    var img = new Image();
+    img.onload = function(){
+        if(this.height>=this.width){
+            console.log("tipo vertical");
+            $("#"+id).addClass('img-galeria-vertical');
+        } else {
+            $("#"+id).addClass('img-galeria-horizontal');
+            console.log("tipo horizontal"); 
+        }
+        console.log( this.width+' '+ this.height );
+    };
+    img.src = url;
+}

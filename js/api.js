@@ -151,7 +151,7 @@ function deletePlantilla(id) {
 function getProgramacion(id) {
     var datos = {
         token: token,
-        id: id
+        id_externo: id
     };
 
     peticion_actual = $.ajax({
@@ -234,6 +234,10 @@ function getPaises(origen) {
         success: function (response) {
             if (origen == 'programacion') {
                 rest_ok(response, "programacion_paises");
+            } else if (origen == 'ver_programacion') {
+                console.log("ver");
+                array_paises = response;
+                getPantallas('ver_programacion');
             } else {
                 rest_ok(response, "pantallas_paises");
             }
@@ -248,7 +252,7 @@ function getPaises(origen) {
  * FUNCION QUE RETORNA LA LISTA DE PANTALLAS DISPONIBLES
  * @param {int} id Id de la pantalla en cuestión, si es 0 devuelve todas
  */
-function getPantallas(id) {
+function getPantallas(origen, id) {
     var datos = {
         token: token,
     };
@@ -259,7 +263,15 @@ function getPantallas(id) {
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            rest_ok(response, "pantallas");
+            if(origen == 'ver_programacion'){
+                console.log('carga')
+                array_pantallas = response.resultado;
+                array_pantallas.seleccionadas = 0;
+                cargar_pantallas(array_pantallas, 'pantallas', 'ver_programacion');
+            }else{
+                rest_ok(response, "pantallas");
+            }
+            
         },
         error: function (response) {
             rest_error(response, "pantallas");

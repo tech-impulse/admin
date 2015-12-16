@@ -34,18 +34,21 @@
     </div>
 </div>
 <script>
-    
-function pre_calendario(){
-            var array = [];
-            for(var i = 0; i < array_pantallas.length; i++){
-                if(array_pantallas[i].seleccionada){
-                    array.push(array_pantallas[i].id_externo);
-                }                
+    function pre_calendario() {
+        var array = [];
+        for (var i = 0; i < array_pantallas.length; i++) {
+            if (array_pantallas[i].seleccionada) {
+                array.push(array_pantallas[i].id_externo);
             }
-            console.log(array);
-            nueva_programacion['id_pantallas'] = array;
-            cargar_calendario();
-            
+        }
+        console.log(array);
+        nueva_programacion['id_pantallas'] = array;
+        $("#div_programacion_plantilla").hide();
+        $("#div_programacion_pantalla").hide();
+        $("#div_programacion_calendario").show();
+        cargar_calendario('editar');
+        getProgramacion();
+
     }
     $('#filtrar_pantallas').on('keyup', function () {
         var palabra = this.value;

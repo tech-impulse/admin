@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-6">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-info lista-grupos">
+                <h4>Grupos</h4>
+                <div id='div_programacion_grupos'>
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" id="filtrar_grupos" placeholder="Buscar por Nombre..." />
+                        <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                    </div>
+                    <div id="div_programacion_grupos_lista"></div>
+                </div>
+            </li>
+            
+            <li class="list-group-item list-group-item-success lista-pantallas">
+                <h4>Pantallas</h4>
+                <div id='div_programacion_pantallas'>
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" id="filtrar_pantallas" placeholder="Buscar por Código Postal..." />
+                        <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                    </div>
+                    <div id="div_programacion_pantallas_lista"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-lg-9 col-md-8 col-sm-6">
+        <div id='calendar'></div>
+    </div>
+</div>
+
+<script>
+$('#filtrar_grupos').on('keyup', function () {
+        console.log("filtra");
+        /*
+        var palabra = this.value;
+        var datos;
+        if (this.value.length > 1) {
+            datos = filtra_datos(palabra, array_pantallas, 'codigo_postal');
+            cargar_pantallas(datos, 'pantallas', 'pantallas');
+        } else {
+            datos = array_pantallas;
+            cargar_pantallas(datos, 'pantallas', 'pantallas');
+        }
+        */
+    });
+    $('#filtrar_pantallas').on('keyup', function () {
+        console.log("filtra");
+        var palabra = this.value;
+        var datos;
+        if (this.value.length > 1) {
+            datos = filtra_datos(palabra, array_pantallas, 'codigo_postal');
+            cargar_pantallas(array_pantallas, 'pantallas', 'ver_programacion');
+        } else {
+            datos = array_pantallas;
+            cargar_pantallas(array_pantallas, 'pantallas', 'ver_programacion');
+        }
+    });
+</script>
