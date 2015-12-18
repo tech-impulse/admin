@@ -57,7 +57,7 @@
     </div>
 </body>
     <?php
-echo 
+
 if (isset($_GET['password']) && isset($_GET['user'])) {
     echo "<script> $('#emailLogin').val(".$_GET['user']."); $('#passwordLogin').val(".$_GET['password'].");login();</script>";
 }
