@@ -36,6 +36,10 @@ function getGaleria(tipo, formato) {
     });
 }
 
+/**
+ * FUNCION QUE ENVIA UNA ARRAY DE IMAGENES AL WS
+ * @param {Object} arrayImagenes [Json con las nuevas imagenes a añadir]
+ */
 function postGaleria(arrayImagenes) {
     var datos = {
         token: token,
@@ -55,6 +59,10 @@ function postGaleria(arrayImagenes) {
     });
 }
 
+/**
+ * FUNCION QUE ELIMINA UNA IMAGEN DE LA GALERIA
+ * @param {Number} id [Id de la imagen a eliminar]
+ */
 function deleteGaleria(id) {
     var datos = {
         token: token,
@@ -101,6 +109,8 @@ function getPlantilla(id, tipo) {
     });
 }
 
+/** ENVIA LA NUEVA PLANTILLA AL WS
+ */
 function postPlantilla() {
     for (var i = 0; i < nueva_plantilla.media.length; i++) {
         nueva_plantilla.media[i].orden = i;
@@ -130,6 +140,10 @@ function postPlantilla() {
     })
 }
 
+/**
+ * ELIMIMAR PLANTILLA DE LA BBDD
+ * @param {Number} id [Id de la plantilla a eliminar]
+ */
 function deletePlantilla(id) {
     var datos = {
         token: token,
@@ -148,6 +162,10 @@ function deletePlantilla(id) {
     })
 }
 
+/**
+ * CONSULTA LA PROGRAMACIOÓN SEGÚN EL ID (SI NO HAY ID DEVUELVE TODAS)
+ * @param {Number} id [Id de la programación a consultar]
+ */
 function getProgramacion(id) {
     var datos = {
         token: token,
@@ -174,6 +192,9 @@ function getProgramacion(id) {
     });
 }
 
+/**ENVIA LA PROGRAMACIÓN AL WS PARA QUE LO GUARDE EN LA BBDD
+ * @param {Number} id [Id de la programación a guardar, si tiene id se modificara la actual]
+ */
 function postProgramacion(id) {
 
     var datos = {
@@ -201,6 +222,10 @@ function postProgramacion(id) {
     })
 }
 
+/**
+ * ELIMINAR LA PROGRAMACION
+ * @param {Number} id [Id de la programacion a eliminar]
+ */
 function deleteProgramacion(id) {
     var datos = {
         token: token,
@@ -223,6 +248,10 @@ function deleteProgramacion(id) {
     })
 }
 
+/**
+ * DEVUELVE LA LISTA DE PAISES DISPONIBLES
+ * @param {String} origen [De donde venimos para consultar esta información]
+ */
 function getPaises(origen) {
     var datos = {
         token: token
@@ -263,15 +292,20 @@ function getPantallas(origen, id) {
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            if(origen == 'ver_programacion'){
+            if (origen == 'ver_programacion') {
                 console.log('carga')
                 array_pantallas = response.resultado;
-                array_pantallas.seleccionadas = 0;
-                cargar_pantallas(array_pantallas, 'pantallas', 'ver_programacion');
-            }else{
+                if (array_pantallas != null) {
+                    array_pantallas.seleccionadas = 0;
+                    cargar_pantallas(array_pantallas, 'pantallas', 'ver_programacion');
+                } else {
+                    console.log("No hay pantallas");
+                    //abrir_popup_informacion('No tienes pantallas dadas de alta');
+                }
+            } else {
                 rest_ok(response, "pantallas");
             }
-            
+
         },
         error: function (response) {
             rest_error(response, "pantallas");
@@ -309,13 +343,17 @@ function rest_ok(respuesta, tipo) {
                 multimedia_disponible = respuesta.galeria;
                 if (multimedia_disponible != null) {
                     for (var i = 0; i < multimedia_disponible.length; i++) {
+                        
                         multimedia_disponible[i].url = url + 'show_image.php?token=' + token + '&id=' + multimedia_disponible[i].id_externo;
+                        console.log(multimedia_disponible[i].url);
                     }
                     $("#content").load("galeria.html", function () {
                         refrescar_galeria(multimedia_disponible, 'galeria', 6);
                     });
                 } else {
-                    abrir_popup_informacion('No hay multimedia disponible');
+                    $("#content").load("galeria.html", function () {
+                        refrescar_galeria(multimedia_disponible, 'galeria', 6);
+                    });
                 }
                 break;
             };
@@ -409,8 +447,13 @@ function rest_ok(respuesta, tipo) {
         case "pantallas":
             {
                 array_pantallas = respuesta.resultado;
-                array_pantallas.seleccionadas = 0;
-                cargar_pantallas(array_pantallas, 'pantallas', 'pantallas');
+                if (array_pantallas != null) {
+                    array_pantallas.seleccionadas = 0;
+                    cargar_pantallas(array_pantallas, 'pantallas', 'pantallas');
+                } else {
+                    console.log("No hay pantallas");
+                    //abrir_popup_informacion('No tienes pantallas dadas de alta');
+                }
                 break;
             };
         case "pantallas_paises":
@@ -477,6 +520,9 @@ function rest_error(respuesta, tipo) {
     abrir_popup_informacion('Ha habido un error en la consulta!');
 }
 
+/**
+ * FUNCION PARA DESLOGARSE DE LA APP (FALTA IMPLEMENTAR LA PARTE SERVIDOR)
+ */
 function logout() {
     token = '';
     localStorage.removeItem("youtter_admin_token");

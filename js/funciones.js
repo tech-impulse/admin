@@ -68,26 +68,31 @@ function refrescar_galeria(imagenes, origen, columnas) {
     var row = '<div class="row" style="margin-top:10px">';
     var cont = 0;
     var html = '';
-    for (var i = 0; i < multimedia_disponible.length; i++) {
-        if (cont == 0 && origen != 'plantilla') {
-            html = row;
-            html = html + '<div class="col-lg-2 col-md-3 col-sm-4">' + '<a  class="thumbnail img-galeria">' + '<form style="width: 160px; height: 140px" id="form_galeria" method="post" action="" enctype="multipart/form-data">' + '<label for="filesToUpload">' + '<img style="width: 160px; height: 140px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">' + ' </label>' + ' <input onChange="cargar_media();" multiple name="filesToUpload[]" id="filesToUpload" style="display:none" type="file" />' + ' </form>' + '</a>' + '</div>';
-            cont++;
-        } else if (cont == 6) {
-            row = '</div>' + row;
-            html = html + row;
-        }
-        setOrientacion(multimedia_disponible[i].url, 'img_galeria_' + multimedia_disponible[i].id_externo);
-        
-        html = html + '<div class="col-lg-2 col-md-3 col-sm-4">' + '<div><a class="thumbnail img-galeria" id="a_galeria_' + multimedia_disponible[i].id_externo + '" onclick="seleccionar_multimedia(' + multimedia_disponible[i].id_externo + ',\'' + origen + '\')">' +
-            '<img id="img_galeria_' + multimedia_disponible[i].id_externo + '" src="' + multimedia_disponible[i].url + '" />';
-        if (origen == 'galeria') {
-            html = html + '<div class="boton_borrar_galeria">' + '<button onclick="borrar_elemento_galeria(' + multimedia_disponible[i].id_externo + ')" type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>' + '</div>';
-        }
-        html = html + '<div class="boton_check_galeria" id="div_check_' + multimedia_disponible[i].id_externo + '"></div>' + '</a></div>' + '</div>';
+    if (multimedia_disponible == null) {
+        html = html + '<div class="col-lg-2 col-md-3 col-sm-4">' + '<a  class="thumbnail img-galeria">' + '<form style="width: 160px; height: 140px" id="form_galeria" method="post" action="" enctype="multipart/form-data">' + '<label for="filesToUpload">' + '<img style="width: 160px; height: 140px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">' + ' </label>' + ' <input onChange="cargar_media();" multiple name="filesToUpload[]" id="filesToUpload" style="display:none" type="file" />' + ' </form>' + '</a>' + '</div>';
+    } else {
+        for (var i = 0; i < multimedia_disponible.length; i++) {
+            if (cont == 0 && origen != 'plantilla') {
+                html = row;
+                html = html + '<div class="col-lg-2 col-md-3 col-sm-4">' + '<a  class="thumbnail img-galeria">' + '<form style="width: 160px; height: 140px" id="form_galeria" method="post" action="" enctype="multipart/form-data">' + '<label for="filesToUpload">' + '<img style="width: 160px; height: 140px;cursor: pointer;" src="http://www.clker.com/cliparts/e/c/e/d/1352236885442170385Add%20Symbol.svg.hi.png" alt="...">' + ' </label>' + ' <input onChange="cargar_media();" multiple name="filesToUpload[]" id="filesToUpload" style="display:none" type="file" />' + ' </form>' + '</a>' + '</div>';
+                cont++;
+            } else if (cont == 6) {
+                row = '</div>' + row;
+                html = html + row;
+            }
+            setOrientacion(multimedia_disponible[i].url, 'img_galeria_' + multimedia_disponible[i].id_externo);
 
-        cont++;
+            html = html + '<div class="col-lg-2 col-md-3 col-sm-4">' + '<div><a class="thumbnail img-galeria" id="a_galeria_' + multimedia_disponible[i].id_externo + '" onclick="seleccionar_multimedia(' + multimedia_disponible[i].id_externo + ',\'' + origen + '\')">' +
+                '<img id="img_galeria_' + multimedia_disponible[i].id_externo + '" src="' + multimedia_disponible[i].url + '" />';
+            if (origen == 'galeria') {
+                html = html + '<div class="boton_borrar_galeria">' + '<button onclick="borrar_elemento_galeria(' + multimedia_disponible[i].id_externo + ')" type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>' + '</div>';
+            }
+            html = html + '<div class="boton_check_galeria" id="div_check_' + multimedia_disponible[i].id_externo + '"></div>' + '</a></div>' + '</div>';
+
+            cont++;
+        }
     }
+
     html = html + '</div>';
     if (origen == "plantilla") {
         $("#div_galeria_plantilla").html(html);
@@ -107,33 +112,35 @@ function cargar_plantillas(origen) {
     var cont = 0;
     var html = '';
 
-    for (var i = 0; i < array_plantillas.length; i++) {
+    if (array_plantillas != null) {
+        for (var i = 0; i < array_plantillas.length; i++) {
 
-        if (origen == 'programacion') {
-            //funcionalidad = 'onclick="seleccionar_plantilla('+array_plantillas[i].id_plantilla+', '+array_plantillas[i].plantilla_nombre+')"';
-            editabe = '<p><a href="#" class="btn btn-success" role="button" onclick="seleccionar_plantilla(' + array_plantillas[i].id_externo + ',\'' +
-                array_plantillas[i].nombre + '\')">Seleccionar</a></p>';
-        } else {
-            editabe = '<p><a href="#" class="btn btn-primary" role="button" onclick="getPlantilla(' + array_plantillas[i].id_externo + ', \'editar\')">Editar</a> <a href="#" onclick="abrir_popup_accion(\'Desea eliminar esta plantilla?\', ' + array_plantillas[i].id_externo + ')" class="btn btn-default glyphicon glyphicon-trash" role="button"></a></p>';
+            if (origen == 'programacion') {
+                //funcionalidad = 'onclick="seleccionar_plantilla('+array_plantillas[i].id_plantilla+', '+array_plantillas[i].plantilla_nombre+')"';
+                editabe = '<p><a href="#" class="btn btn-success" role="button" onclick="seleccionar_plantilla(' + array_plantillas[i].id_externo + ',\'' +
+                    array_plantillas[i].nombre + '\')">Seleccionar</a></p>';
+            } else {
+                editabe = '<p><a href="#" class="btn btn-primary" role="button" onclick="getPlantilla(' + array_plantillas[i].id_externo + ', \'editar\')">Editar</a> <a href="#" onclick="abrir_popup_accion(\'Desea eliminar esta plantilla?\', ' + array_plantillas[i].id_externo + ')" class="btn btn-default glyphicon glyphicon-trash" role="button"></a></p>';
+            }
+
+            if (cont == 6 || cont == 0) {
+                row = '</div>' + row;
+                html = html + row;
+                cont = 0;
+            }
+            html = html + '<div class="col-sm-6 col-md-4 col-lg-2" ' + funcionalidad + '>' +
+                '<div class="thumbnail">' +
+                '<img class="img_plantilla" src="'+url+'/show_image.php?token=' + token + "&id=" + array_plantillas[i].elementos[0].id_externo + '" alt="...">' +
+                '<div class="caption">' +
+                '<h3>' + array_plantillas[i].nombre + '</h3>' +
+                '<p>' + array_plantillas[i].descripcion + '</p>' +
+                editabe +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+            cont++;
         }
-
-        if (cont == 6 || cont == 0) {
-            row = '</div>' + row;
-            html = html + row;
-            cont = 0;
-        }
-        html = html + '<div class="col-sm-6 col-md-4 col-lg-2" ' + funcionalidad + '>' +
-            '<div class="thumbnail">' +
-            '<img class="img_plantilla" src="http://testhtml5.esadecreapolis.com/ws/show_image.php?token=' + token + "&id=" + array_plantillas[i].elementos[0].id_externo + '" alt="...">' +
-            '<div class="caption">' +
-            '<h3>' + array_plantillas[i].nombre + '</h3>' +
-            '<p>' + array_plantillas[i].descripcion + '</p>' +
-            editabe +
-            '</div>' +
-            '</div>' +
-            '</div>';
-
-        cont++;
     }
     html = html + '</div>';
     if (origen == 'programacion') {
@@ -175,7 +182,7 @@ function seleccionar_plantilla(id, nombre) {
 }
 
 /**
- * FUNCION QUE MUESTRA LA LISTA DE PANTALLAS
+ * FUNCION QUE MUESTRA LA LISTA DE PANTALLAS SEGUN EL ORIGEN
  * @param {Object}   datos  [Datos de origen en formato JSON]
  * @param {String} tipo   [Tipo de lista que quiero mostrar (Paises, Provincias o Pantallas)]
  */
@@ -484,17 +491,22 @@ function filtra_datos(palabra, datos, filtro) {
     return datos_filtrados;
 }
 
-function setOrientacion(url, id){   
+/**
+ * FUNCION QUE CAMBIA LA ORIENTACIÓN DE LA IMAGEN Y LA ESCALA
+ * @param {String} url [Imagen que se va a visualizar]
+ * @param {Number} id  [Id del elemento a cambiar la clase (Vertical o Horizontal)]
+ */
+function setOrientacion(url, id) {
     var img = new Image();
-    img.onload = function(){
-        if(this.height>=this.width){
+    img.onload = function () {
+        if (this.height >= this.width) {
             console.log("tipo vertical");
-            $("#"+id).addClass('img-galeria-vertical');
+            $("#" + id).addClass('img-galeria-vertical');
         } else {
-            $("#"+id).addClass('img-galeria-horizontal');
-            console.log("tipo horizontal"); 
+            $("#" + id).addClass('img-galeria-horizontal');
+            console.log("tipo horizontal");
         }
-        console.log( this.width+' '+ this.height );
+        console.log(this.width + ' ' + this.height);
     };
     img.src = url;
 }

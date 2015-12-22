@@ -11,7 +11,8 @@ $(document).ready(function () {
     });
 });
 
-var url = "http://testhtml5.esadecreapolis.com/ws/";
+//var url = "http://testhtml5.esadecreapolis.com/ws/";
+var url = "http://admin.youtter.com/webservices/admin/";
 var token;
 var peticion_actual;
 var columnasGaleria = 6;

@@ -1,3 +1,8 @@
+/**
+ *FUNCION QUE ES LLAMADA CUANDO SELECCIONAS UNA IMAGEN DESDE NUEVA PLANTILLA
+ * @param {Number} id     [Id de la imagen seleccionada]
+ * @param {String} origen [Desde donde estamos seleccionado]
+ */
 function seleccionar_multimedia(id, origen) {
     if (origen == "plantilla") {
         for (var i = 0; i < multimedia_disponible.length; i++) { // Recorremos el array
@@ -12,6 +17,10 @@ function seleccionar_multimedia(id, origen) {
     }
 }
 
+/**
+ *FUNCION QUE AÑADE AL ARRAY DE NUEVA PLANTILLA, LA IMAGEN SELECCIONADA
+ * @param {Array} media [Información de la imagen]
+ */
 function anadir_multimedia(media) {
     if (nueva_plantilla.media == undefined) {
         nueva_plantilla.media = [];
@@ -22,6 +31,10 @@ function anadir_multimedia(media) {
     refrescar_player();
 }
 
+/**
+ * ELIMINA LA IMAGEN DEL ARRAY DE NUEVA PLANTILLA QUE SE ESTÁ GENERANDO/MODIFICANDO
+ * @param {Number} id [Id de la imagen a eliminar]
+ */
 function eliminar_multimedia(id) {
     for (var i = 0; i < nueva_plantilla.media.length; i++) {
         if (nueva_plantilla.media[i].id_externo == id) {
@@ -34,6 +47,9 @@ function eliminar_multimedia(id) {
     refrescar_player();
 }
 
+/**
+ * REFRESCA EL PLAYER Y LO ACTUALIZA TODO CON LOS NUEVOS DATOS
+ */
 function refrescar_player() {
 
     var html = '<li class="list-group-item">' +
@@ -48,7 +64,7 @@ function refrescar_player() {
         for (var i = 0; i < nueva_plantilla.media.length; i++) {
             if (nueva_plantilla.media[i] != undefined) {
                 var duracion = parseInt(nueva_plantilla.media[i].duracion);
-                var img = '<img class="thumb" src="http://testhtml5.esadecreapolis.com/ws/show_image.php?token=' + token + "&id=" + nueva_plantilla.media[i].id_externo + '"/>';
+                var img = '<img class="thumb" src="'+url+'show_image.php?token=' + token + "&id=" + nueva_plantilla.media[i].id_externo + '"/>';
                 html = html + '<li class="list-group-item" id="line' + i + '"><div class="row"><div class="col-lg-3">' + img + '</div>' +
                     '<div class="col-lg-4"><center>' +
                     '<input onchange="nueva_plantilla.media[' + i + '].duracion=this.value" value="' + duracion + '" type="number" style="font-size:20px; margin:20px; width:80px; text-align:center; border-radius:5px" min="0" max="999"></center></div>' +
@@ -74,6 +90,11 @@ function refrescar_player() {
     $("#ul_galeria_plantilla").html(html);
 }
 
+/**
+ * MUEVE LA POSICION DEL ELEMENTO DE LA LISTA DE NUEVA PROGRAMACION
+ * @param {Number}   desde [Posicion en la array del elemento]
+ * @param {Number} tipo  [Controla que no esté ni al principio ni al final de la lista, para que no lo mueva a una posicion imposible]
+ */
 function mover_elemento(desde, tipo) {
     if (desde == 0 && tipo == -1) {} else {
         var hasta = desde + tipo;
@@ -87,7 +108,9 @@ function mover_elemento(desde, tipo) {
 var playSecuence = '';
 var secuencePosition = 0;
 
-
+/**
+ * ACTIVA EL PLAYER PARA QUE VAYA MOSTRANDO LAS IMAGENES POR PANTALLA PROGRESIVAMENTE
+ */
 function playDisplay() {
     if (nueva_plantilla.media.length != undefined) {
         if ($("#btnPlay").hasClass("glyphicon-play") && nueva_plantilla.media.length > 0) {
@@ -112,6 +135,10 @@ function playDisplay() {
 
 }
 
+/**
+ *INTERACTUAR CON EL PLAYER PARA QUE AVANCE, RETROCEDA, VAYA AL PRINCIPIO O AL FINAL
+ * @param {Number} type [Tipo de movimiento, +-1 mueve una posicion alante o atras, +-2 va a la primera o ultima posicion]
+ */
 function changeDisplay(type) {
     if (type == -2) {
         secuencePosition = 0;
@@ -138,7 +165,12 @@ function changeDisplay(type) {
     }
 }
 
-
+/**
+ * FUNCION GENERICA QUE BORRA UN ELEMENTO DE UNA ARRAY
+ * @param   {Array}    arr   [array a modificar]
+ * @param   {Number}   index [posicion]
+ * @returns {Array} [Devuelve el array tras modificarla]
+ */
 function removeElement(arr, index) {
     newArr = [];
     for (var i = 0, l = arr.length; i < l; i++) {
@@ -149,6 +181,10 @@ function removeElement(arr, index) {
     return newArr;
 }
 
+/**
+ * CAMBIA LA ORIENTACION DEL PLAYER
+ * @param {Object} element [Es el elemento seleccionado, para controlar si hemos escogido vertical u horizontal]
+ */
 function cambiar_orientacion(element) {
     console.log("cambiar");
     $("#ul_orientacion").text(element.text);

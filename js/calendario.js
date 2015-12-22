@@ -1,4 +1,7 @@
-
+ /**
+  * FUNCION QUE GENERA EL CALENDARIO
+  * @param {String} tipo [Si es editable o no]]
+  */
  function cargar_calendario(tipo) {     
      $('#calendar').fullCalendar({
          dayClick: function (date, jsEvent, view) {
@@ -68,6 +71,11 @@
 
  }
 
+ /**
+  * ABRE EL POPUP PARA GUARDAR LA NUEVA PROGRAMACIÓN
+  * @param {[[Type]]} data   [[Description]]
+  * @param {Object}   evento [[Description]]
+  */
  function abrir_popup_guardar_programacion(data, evento) {
      var id_evento = '';
      var boton = 'Publicar!';
@@ -212,7 +220,6 @@
 
              //postPlantilla($("#in_popup_guardar").val(), $("#txt_popup_guardar").val(), multimedia_seleccionada);
          } else {
-             console.log("sapdj=");
              $("#sp_popup_programacion").show();
          }
         
@@ -279,6 +286,10 @@
      });
  }
 
+ /**
+  * BORRA LA PROGRAMACIÓN SELECCIONADA
+  * @param {Number} id [Id de la programación que se va a eliminar]
+  */
  function borrar_programacion(id) {
      console.log("borra");
      var alert = document.querySelector(".sweet-alert"),
@@ -289,4 +300,5 @@
          swal("borra esta " + id)
      }, 500);
  }
+
  // Asi se accede a la info $('#calendar').fullCalendar('clientEvents');
